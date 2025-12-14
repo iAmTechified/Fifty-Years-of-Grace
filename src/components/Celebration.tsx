@@ -21,7 +21,7 @@ const schedule = [
     }
 ];
 
-export default function Celebration() {
+export default function Celebration({ onOpenModal }: { onOpenModal: () => void }) {
     const ref = useRef(null);
     const isInView = useInView(ref, { margin: "-10% 0px -10% 0px", once: true });
 
@@ -126,7 +126,7 @@ export default function Celebration() {
                 >
                     <button
                         className="group relative px-8 py-4 bg-transparent border border-[#F6F3EE]/20 hover:border-[#C7A24B] transition-colors duration-500 overflow-hidden"
-                        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} // Simple placeholder action or scroll to top
+                        onClick={onOpenModal}
                     >
                         <span className="relative z-10 font-sans text-[11px] tracking-[0.2em] uppercase text-[#F6F3EE] group-hover:text-[#C7A24B] transition-colors duration-300">
                             Request Invitation
