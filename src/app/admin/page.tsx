@@ -830,7 +830,7 @@ const AdminLogin = ({ onLogin }: { onLogin: () => void }) => {
                         <button
                             type="submit"
                             disabled={loading || code.length < 1}
-                            className="w-full py-4 bg-[#0E0E10] text-white rounded-xl font-medium hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex justify-center items-center"
+                            className="w-full py-4 bg-[#140309] text-white rounded-xl font-medium hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex justify-center items-center"
                         >
                             {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Access Dashboard"}
                         </button>

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --background: #0E0E10;
+  --background: #140309;
   --foreground: #F6F3EE;
   --accent: #C7A24B;
   --font-serif: var(--font-canela);

@@ -95,7 +95,7 @@ export default function Dedication() {
         <motion.section
             ref={containerRef}
             style={{ borderTopLeftRadius: topRadius, borderTopRightRadius: topRadius }}
-            className="relative w-full min-h-[50vh] h-screen md:h-[80vh] py-3 md:py-6 bg-[#0E0E10] text-[#F6F3EE] overflow-hidden z-20"
+            className="relative w-full min-h-[50vh] h-screen md:h-[80vh] py-3 md:py-6 bg-[#140309] text-[#F6F3EE] overflow-hidden z-20"
         >
             {/* Background Texture */}
             <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none mix-blend-overlay"
@@ -145,7 +145,7 @@ export default function Dedication() {
             </div>
 
             {/* Bottom Decoration */}
-            <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#0E0E10] to-transparent pointer-events-none z-10" />
+            <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#140309] to-transparent pointer-events-none z-10" />
 
         </motion.section>
     );

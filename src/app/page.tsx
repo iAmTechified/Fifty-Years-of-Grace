@@ -16,7 +16,7 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <main className="min-h-screen bg-[#0E0E10]">
+    <main className="min-h-screen bg-[#140309]">
       <FloatingNav />
       <ScrollProgress />
       <RsvpModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
@@ -27,7 +27,7 @@ export default function Home() {
 
       <div className="h-screen w-full" />
 
-      {/* <div className="relative z-10 bg-[#0E0E10]"> */}
+      {/* <div className="relative z-10 bg-[#140309]"> */}
       <section id="dedication">
         <Dedication />
       </section>

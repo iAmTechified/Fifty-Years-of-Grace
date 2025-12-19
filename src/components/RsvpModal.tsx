@@ -84,7 +84,7 @@ export default function RsvpModal({ isOpen, onClose }: RsvpModalProps) {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
                             transition={{ type: "spring", duration: 0.6, bounce: 0.2 }}
-                            className="w-[90vw] max-w-[480px] bg-[#0E0E10] border border-[#C7A24B]/30 p-10 shadow-2xl overflow-hidden rounded-xl relative"
+                            className="w-[90vw] max-w-[480px] bg-[#140309] border border-[#C7A24B]/30 p-10 shadow-2xl overflow-hidden rounded-xl relative"
                         >
                             <div className="flex flex-col gap-8 font-sans text-[#F6F3EE] relative z-20">
                                 <div className="flex justify-between items-center mb-2">
@@ -134,7 +134,7 @@ export default function RsvpModal({ isOpen, onClose }: RsvpModalProps) {
                                         <button
                                             onClick={handleSubmit}
                                             disabled={status === 'loading'}
-                                            className="mt-4 py-4 w-full bg-[#C7A24B] text-[#0E0E10] uppercase text-[11px] tracking-[0.2em] font-medium hover:bg-[#F6F3EE] transition-colors duration-300 disabled:opacity-50"
+                                            className="mt-4 py-4 w-full bg-[#C7A24B] text-[#140309] uppercase text-[11px] tracking-[0.2em] font-medium hover:bg-[#F6F3EE] transition-colors duration-300 disabled:opacity-50"
                                         >
                                             {status === 'loading' ? 'Processing...' : 'Submit Request'}
                                         </button>

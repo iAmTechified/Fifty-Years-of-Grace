@@ -17,8 +17,8 @@ const storyData = [
         text: "In every room she enters, warmth follows—a testament to a heart that has learned the art of giving.",
         highlight: "giving",
         imageColor: "from-[#2a2a2a] to-[#3a3a3a]",
-        image: "./Mr. Obele Akinniranye Portrait.jpg",
-        title: "Mr. Obele Akinniranye"
+        image: "./Mrs. Obele Akinniranye Portrait.jpg",
+        title: "Mrs. Obele Akinniranye"
     },
     {
         id: 3,
@@ -78,7 +78,7 @@ const StoryBlock = ({ item, index, setIndex }: { item: typeof storyData[0], inde
             className="h-full flex flex-col items-center justify-between md:justify-center max-w-lg mx-auto p-8 pt-15"
         >
             <div className='md:hidden h-full w-full'></div>
-            <p className="h-[85%] md:h-auto text-2xl md:text-4xl leading-relaxed font-sans font-light text-[#F6F3EE]/90">
+            <p className="h-[60%] md:h-auto text-xl md:text-4xl leading-relaxed font-sans font-light text-[#F6F3EE]/90">
                 {item.text.split(" ").map((word, i) => {
                     const isHighlight = word.toLowerCase().includes(item.highlight.toLowerCase());
                     return (
@@ -145,7 +145,7 @@ export default function Story() {
     return (
         <section
             ref={containerRef}
-            className="relative w-full bg-[#0E0E10] text-[#F6F3EE]"
+            className="relative w-full bg-[#140309] text-[#F6F3EE]"
             onMouseMove={handleMouseMove}
         >
 
@@ -155,7 +155,7 @@ export default function Story() {
             </div>
             <div className="relative w-full flex flex-col md:flex-row items-start">
                 {/* LEFT: Sticky Image Container */}
-                <div className="flex w-full md:w-1/2 h-[45vh] md:h-screen sticky top-[8vh] md:top-0 self-start items-center justify-center p-3 md:p-12 z-20">
+                <div className="flex w-full md:w-1/2 h-[45vh] md:h-screen sticky top-[15vh] md:top-0 self-start items-center justify-center p-3 md:p-12 z-20">
 
                     {/* Perspective Context */}
                     <div className="relative w-full h-full flex items-center justify-center perspective-[1000px]">
@@ -169,14 +169,17 @@ export default function Story() {
                         >
                             {/* Image Transitions */}
                             <div className="relative w-full h-full rounded-sm overflow-hidden shadow-2xl bg-[#1a1a1a]">
-                                <AnimatePresence mode="wait">
+                                {storyData.map((story, index) => (
                                     <motion.div
-                                        key={activeIndex}
-                                        initial={{ opacity: 0, scale: 1.1 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        exit={{ opacity: 0 }}
-                                        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                                        className={`absolute inset-0 bg-gradient-to-br ${storyData[activeIndex].imageColor}`}
+                                        key={story.id}
+                                        initial={{ opacity: 0 }}
+                                        animate={{
+                                            opacity: index === activeIndex ? 1 : 0,
+                                            scale: index === activeIndex ? 1 : 1.1,
+                                            zIndex: index === activeIndex ? 10 : 0
+                                        }}
+                                        transition={{ duration: index === activeIndex ? 1.5 : 0.5, ease: "easeInOut" }}
+                                        className={`absolute inset-0 bg-gradient-to-br ${story.imageColor}`}
                                     >
                                         {/* Placeholder visual noise/texture */}
                                         <div className="absolute inset-0 opacity-20 mix-blend-overlay"
@@ -185,17 +188,13 @@ export default function Story() {
 
                                         {/* Image */}
                                         <img
-                                            src={storyData[activeIndex].image}
-                                            alt={storyData[activeIndex].title}
+                                            src={story.image}
+                                            alt={story.title}
                                             className="absolute inset-0 w-full h-full object-cover object-top"
+                                            loading="eager" // Ensure images load immediately
                                         />
-
-                                        {/* Example Placeholder */}
-                                        {/* <div className="absolute inset-0 flex items-center justify-center opacity-10 font-serif text-9xl italic">
-                                            {activeIndex + 1}
-                                        </div> */}
                                     </motion.div>
-                                </AnimatePresence>
+                                ))}
                             </div>
 
                             {/* Subtle Shadow/Reflection */}

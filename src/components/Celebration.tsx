@@ -26,7 +26,7 @@ export default function Celebration({ onOpenModal }: { onOpenModal: () => void }
     const isInView = useInView(ref, { margin: "-10% 0px -10% 0px", once: true });
 
     return (
-        <section className="relative w-full py-32 md:py-48 bg-[#0E0E10] text-[#F6F3EE] overflow-hidden z-10">
+        <section className="relative w-full py-32 md:py-48 bg-[#140309] text-[#F6F3EE] overflow-hidden z-10">
 
             {/* Ambient Background Elements */}
             <div className="absolute inset-0 pointer-events-none">
@@ -135,7 +135,7 @@ export default function Celebration({ onOpenModal }: { onOpenModal: () => void }
                 </motion.div>
 
                 {/* Bottom decorative anchor or fade */}
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-0 bg-gradient-to-t from-[#0E0E10] to-transparent pointer-events-none" />
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-0 bg-gradient-to-t from-[#140309] to-transparent pointer-events-none" />
 
             </div>
         </section>

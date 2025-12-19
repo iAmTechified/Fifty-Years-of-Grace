@@ -28,9 +28,9 @@ export default function GalleryPage() {
     };
 
     return (
-        <main className="min-h-screen bg-[#0E0E10] text-[#F6F3EE] pt-32 pb-20 px-6">
+        <main className="min-h-screen bg-[#140309] text-[#F6F3EE] pt-32 pb-20 px-6">
             {/* Navigation Bar (Simplified) */}
-            <nav className="fixed top-0 left-0 right-0 z-50 p-6 flex justify-between items-center bg-[#0E0E10]/80 backdrop-blur-md">
+            <nav className="fixed top-0 left-0 right-0 z-50 p-6 flex justify-between items-center bg-[#140309]/80 backdrop-blur-md">
                 <Link href="/" className="font-serif text-xl md:text-2xl text-[#C7A24B]">OBELE @ 50</Link>
                 <div className="flex gap-4">
                     <Link href="/" className="text-sm font-sans uppercase tracking-widest text-[#F6F3EE]/60 hover:text-[#C7A24B] transition-colors">Home</Link>
@@ -49,7 +49,7 @@ export default function GalleryPage() {
 
                     <button
                         onClick={() => setIsUploadModalOpen(true)}
-                        className="bg-[#C7A24B] text-[#0E0E10] px-8 py-4 uppercase text-xs tracking-[0.2em] font-bold hover:bg-[#D4B56A] transition-colors"
+                        className="bg-[#C7A24B] text-[#140309] px-8 py-4 uppercase text-xs tracking-[0.2em] font-bold hover:bg-[#D4B56A] transition-colors"
                     >
                         Upload Photo
                     </button>
@@ -172,7 +172,7 @@ function UploadModal({ isOpen, onClose, onUploadSuccess }: { isOpen: boolean; on
                                         alert(`ERROR! ${error.message}`);
                                     }}
                                     appearance={{
-                                        button: "bg-[#C7A24B] text-[#0E0E10] font-sans font-bold uppercase tracking-widest text-xs hover:bg-[#D4B56A]",
+                                        button: "bg-[#C7A24B] text-[#140309] font-sans font-bold uppercase tracking-widest text-xs hover:bg-[#D4B56A]",
                                         container: "border-2 border-dashed border-[#F6F3EE]/20 rounded-lg p-0 hover:border-[#C7A24B] transition-colors",
                                         label: "text-[#C7A24B] hover:text-[#D4B56A]",
                                         allowedContent: "text-[#F6F3EE]/40"

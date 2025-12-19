@@ -171,7 +171,7 @@ export default function Moments() {
     return (
         <section
             ref={containerRef}
-            className="relative w-full min-h-screen py-32 bg-[#0E0E10] text-[#F6F3EE] overflow-hidden"
+            className="relative w-full min-h-screen py-32 bg-[#140309] text-[#F6F3EE] overflow-hidden"
         >
             {/* Background Texture */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
@@ -330,7 +330,7 @@ export default function Moments() {
                         <div className="flex gap-4">
                             <button
                                 onClick={handleOpenWishForm}
-                                className="flex-1 bg-[#C7A24B] text-[#0E0E10] py-2 px-4 text-sm font-semibold hover:bg-[#D4B56A] transition-colors"
+                                className="flex-1 bg-[#C7A24B] text-[#140309] py-2 px-4 text-sm font-semibold hover:bg-[#D4B56A] transition-colors"
                             >
                                 Yes, I’d love to
                             </button>
@@ -455,7 +455,7 @@ function WishFormModal({ onClose, onSubmit }: { onClose: () => void, onSubmit: (
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="w-full bg-[#0E0E10] border-b border-[#F6F3EE]/20 focus:border-[#C7A24B] text-[#F6F3EE] py-3 text-lg outline-none transition-colors placeholder:text-[#F6F3EE]/20"
+                            className="w-full bg-[#140309] border-b border-[#F6F3EE]/20 focus:border-[#C7A24B] text-[#F6F3EE] py-3 text-lg outline-none transition-colors placeholder:text-[#F6F3EE]/20"
                             placeholder="Enter your name"
                             required
                         />
@@ -466,7 +466,7 @@ function WishFormModal({ onClose, onSubmit }: { onClose: () => void, onSubmit: (
                         <textarea
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
-                            className="w-full bg-[#0E0E10] border-b border-[#F6F3EE]/20 focus:border-[#C7A24B] text-[#F6F3EE] py-3 text-lg outline-none transition-colors min-h-[120px] resize-none placeholder:text-[#F6F3EE]/20"
+                            className="w-full bg-[#140309] border-b border-[#F6F3EE]/20 focus:border-[#C7A24B] text-[#F6F3EE] py-3 text-lg outline-none transition-colors min-h-[120px] resize-none placeholder:text-[#F6F3EE]/20"
                             placeholder="Write a warm note..."
                             required
                         />
@@ -483,7 +483,7 @@ function WishFormModal({ onClose, onSubmit }: { onClose: () => void, onSubmit: (
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="bg-[#C7A24B] text-[#0E0E10] py-3 px-8 text-sm font-bold uppercase tracking-widest hover:bg-[#D4B56A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="bg-[#C7A24B] text-[#140309] py-3 px-8 text-sm font-bold uppercase tracking-widest hover:bg-[#D4B56A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isSubmitting ? 'Sending...' : 'Send Note'}
                         </button>
@@ -577,14 +577,14 @@ const GalleryModal = ({ images, initialIndex, onClose }: { images: GalleryImage[
             </div>
 
             {/* Thumbnails Footer */}
-            <div className="h-32 w-full border-t border-white/5 bg-[#0E0E10]/50 backdrop-blur-md flex items-center justify-center gap-4 px-6 overflow-x-auto z-20">
+            <div className="h-32 w-full border-t border-white/5 bg-black/50 backdrop-blur-md flex items-center justify-center gap-4 px-6 overflow-x-auto z-20">
                 {images.map((img, idx) => (
                     <button
                         key={img.id}
                         onClick={() => setCurrentIndex(idx)}
                         className={`relative h-20 w-20 flex-shrink-0 rounded-sm overflow-hidden transition-all duration-300 ${idx === currentIndex
-                                ? 'ring-2 ring-[#C7A24B] opacity-100 scale-105'
-                                : 'opacity-40 hover:opacity-100 hover:scale-105'
+                            ? 'ring-2 ring-[#C7A24B] opacity-100 scale-105'
+                            : 'opacity-40 hover:opacity-100 hover:scale-105'
                             }`}
                     >
                         <img

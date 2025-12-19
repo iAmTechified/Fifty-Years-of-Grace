@@ -89,7 +89,7 @@ const CTAButton = ({ onClick }: { onClick: () => void }) => (
     <Magnetic>
         <button
             onClick={onClick}
-            className="relative flex items-center justify-center w-24 h-24 rounded-full bg-[#1A1A1E]/80 backdrop-blur-md border border-[#C7A24B]/30 text-[#C7A24B] group overflow-hidden"
+            className="relative flex items-center justify-center w-24 h-24 rounded-full bg-[#0a0104]/80 backdrop-blur-md border border-[#C7A24B]/30 text-[#C7A24B] group overflow-hidden"
             aria-label="RSVP"
         >
             {/* Rotating Text Ring */}
@@ -149,7 +149,7 @@ export default function Hero({ isModalOpen, onOpenModal }: { isModalOpen: boolea
     const subheadline = "An invitation to honor, reflect, and celebrate.";
 
     return (
-        <section ref={containerRef} className="fixed inset-0 h-screen w-full overflow-hidden bg-[#0E0E10] text-[#F6F3EE] z-0">
+        <section ref={containerRef} className="fixed inset-0 h-screen w-full overflow-hidden bg-[#140309] text-[#F6F3EE] z-0">
 
             {/* Cinematic Fog */}
             <div className="absolute inset-0 pointer-events-none z-0 opacity-40 mix-blend-screen">

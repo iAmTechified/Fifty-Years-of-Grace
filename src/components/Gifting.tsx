@@ -75,7 +75,7 @@ export default function Gifting() {
     };
 
     return (
-        <section className="relative w-full py-32 px-6 md:px-12 bg-[#F6F3EE] text-[#0E0E10] overflow-hidden">
+        <section className="relative w-full py-32 px-6 md:px-12 bg-[#F6F3EE] text-[#140309] overflow-hidden">
             {/* Background Texture/Grain (Optional) */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-multiply bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')]"></div>
 
@@ -86,7 +86,7 @@ export default function Gifting() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                        className="text-5xl md:text-6xl font-serif text-[#0E0E10] mb-6"
+                        className="text-5xl md:text-6xl font-serif text-[#140309] mb-6"
                     >
                         With Gratitude
                     </motion.h2>
@@ -94,7 +94,7 @@ export default function Gifting() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                        className="text-lg md:text-xl font-sans text-[#0E0E10]/60 max-w-2xl mx-auto"
+                        className="text-lg md:text-xl font-sans text-[#140309]/60 max-w-2xl mx-auto"
                     >
                         For those who wish to give, your kindness is sincerely appreciated.
                     </motion.p>
@@ -139,7 +139,7 @@ function GiftCard({ gift, index, onSelect }: { gift: GiftOption; index: number; 
                 ease: [0.22, 1, 0.36, 1]
             }}
             viewport={{ once: true }}
-            className="group relative flex flex-col items-center text-center p-10 bg-white border border-[#0E0E10]/5 rounded-sm hover:border-[#C7A24B]/40 transition-colors duration-500 cursor-pointer"
+            className="group relative flex flex-col items-center text-center p-10 bg-white border border-[#140309]/5 rounded-sm hover:border-[#C7A24B]/40 transition-colors duration-500 cursor-pointer"
             onClick={onSelect}
             data-cursor-text="Gift"
             whileHover={{ y: -5, boxShadow: "0 10px 40px -10px rgba(0,0,0,0.05)" }}
@@ -150,18 +150,18 @@ function GiftCard({ gift, index, onSelect }: { gift: GiftOption; index: number; 
             </div>
 
             {/* Title */}
-            <h3 className="text-2xl font-serif mb-3 text-[#0E0E10] group-hover:text-[#C7A24B] transition-colors duration-300">
+            <h3 className="text-2xl font-serif mb-3 text-[#140309] group-hover:text-[#C7A24B] transition-colors duration-300">
                 {gift.title}
             </h3>
 
             {/* Description */}
-            <p className="text-sm font-sans text-[#0E0E10]/60 mb-6 leading-relaxed">
+            <p className="text-sm font-sans text-[#140309]/60 mb-6 leading-relaxed">
                 {gift.description}
             </p>
 
             {/* Value */}
             <div className="mt-auto mb-6">
-                <span className="font-serif text-lg text-[#0E0E10] opacity-80 border-b border-[#C7A24B]/30 pb-1">
+                <span className="font-serif text-lg text-[#140309] opacity-80 border-b border-[#C7A24B]/30 pb-1">
                     {gift.value}
                 </span>
             </div>
@@ -221,7 +221,7 @@ function GiftModal({ gift, onClose }: { gift: GiftOption; onClose: () => void })
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
-                className="fixed inset-0 z-50 bg-[#0E0E10]/80 backdrop-blur-sm flex items-center justify-center p-4"
+                className="fixed inset-0 z-50 bg-[#140309]/80 backdrop-blur-sm flex items-center justify-center p-4"
                 onClick={onClose}
             >
                 {/* Modal Content */}
@@ -236,7 +236,7 @@ function GiftModal({ gift, onClose }: { gift: GiftOption; onClose: () => void })
                     {/* Close Button */}
                     <button
                         onClick={onClose}
-                        className="absolute top-6 right-6 text-[#0E0E10]/40 hover:text-[#C7A24B] transition-colors"
+                        className="absolute top-6 right-6 text-[#140309]/40 hover:text-[#C7A24B] transition-colors"
                     >
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                             <path d="M18 6L6 18M6 6l12 12" />
@@ -245,44 +245,44 @@ function GiftModal({ gift, onClose }: { gift: GiftOption; onClose: () => void })
 
                     {/* Modal Header */}
                     <div className="text-center mb-10">
-                        <span className="block text-xs uppercase tracking-widest text-[#0E0E10]/40 mb-3">Request to Gift</span>
-                        <h3 className="text-3xl font-serif text-[#0E0E10] mb-2">{gift.title}</h3>
+                        <span className="block text-xs uppercase tracking-widest text-[#140309]/40 mb-3">Request to Gift</span>
+                        <h3 className="text-3xl font-serif text-[#140309] mb-2">{gift.title}</h3>
                         <p className="text-[#C7A24B] font-serif text-xl">{gift.value}</p>
                     </div>
 
                     {/* Form */}
                     <form className="space-y-6" onSubmit={handleSubmit}>
                         <div className="space-y-1">
-                            <label className="block text-xs uppercase tracking-wider text-[#0E0E10]/50 ml-1">Your Name</label>
+                            <label className="block text-xs uppercase tracking-wider text-[#140309]/50 ml-1">Your Name</label>
                             <input
                                 required
                                 type="text"
                                 value={formData.name}
                                 onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                className="w-full bg-white border-b border-[#0E0E10]/20 p-3 text-[#0E0E10] font-sans focus:outline-none focus:border-[#C7A24B] transition-colors"
+                                className="w-full bg-white border-b border-[#140309]/20 p-3 text-[#140309] font-sans focus:outline-none focus:border-[#C7A24B] transition-colors"
                                 placeholder="First & Last Name"
                             />
                         </div>
 
                         <div className="space-y-1">
-                            <label className="block text-xs uppercase tracking-wider text-[#0E0E10]/50 ml-1">Email Address</label>
+                            <label className="block text-xs uppercase tracking-wider text-[#140309]/50 ml-1">Email Address</label>
                             <input
                                 required
                                 type="email"
                                 value={formData.email}
                                 onChange={e => setFormData({ ...formData, email: e.target.value })}
-                                className="w-full bg-white border-b border-[#0E0E10]/20 p-3 text-[#0E0E10] font-sans focus:outline-none focus:border-[#C7A24B] transition-colors"
+                                className="w-full bg-white border-b border-[#140309]/20 p-3 text-[#140309] font-sans focus:outline-none focus:border-[#C7A24B] transition-colors"
                                 placeholder="name@example.com"
                             />
                         </div>
 
                         <div className="space-y-1">
-                            <label className="block text-xs uppercase tracking-wider text-[#0E0E10]/50 ml-1">Phone (Optional)</label>
+                            <label className="block text-xs uppercase tracking-wider text-[#140309]/50 ml-1">Phone (Optional)</label>
                             <input
                                 type="tel"
                                 value={formData.phone}
                                 onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                                className="w-full bg-white border-b border-[#0E0E10]/20 p-3 text-[#0E0E10] font-sans focus:outline-none focus:border-[#C7A24B] transition-colors"
+                                className="w-full bg-white border-b border-[#140309]/20 p-3 text-[#140309] font-sans focus:outline-none focus:border-[#C7A24B] transition-colors"
                                 placeholder="+1 (555) 000-0000"
                             />
                         </div>
@@ -292,7 +292,7 @@ function GiftModal({ gift, onClose }: { gift: GiftOption; onClose: () => void })
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="group relative inline-flex items-center justify-center px-8 py-3 bg-[#0E0E10] text-[#F6F3EE] font-sans uppercase tracking-widest text-xs hover:bg-[#C7A24B] transition-colors duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="group relative inline-flex items-center justify-center px-8 py-3 bg-[#140309] text-[#F6F3EE] font-sans uppercase tracking-widest text-xs hover:bg-[#C7A24B] transition-colors duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <span className={clsx("transition-opacity duration-300", isLoading ? "opacity-0" : "opacity-100")}>
                                     Request to Gift
@@ -303,7 +303,7 @@ function GiftModal({ gift, onClose }: { gift: GiftOption; onClose: () => void })
                                     </div>
                                 )}
                             </button>
-                            <p className="mt-4 text-[10px] text-[#0E0E10]/30 flex items-center justify-center gap-1.5 font-sans">
+                            <p className="mt-4 text-[10px] text-[#140309]/30 flex items-center justify-center gap-1.5 font-sans">
                                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                                     <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>

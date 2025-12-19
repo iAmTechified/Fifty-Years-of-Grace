@@ -2,7 +2,7 @@ import React from "react";
 
 export default function MobileUnderConstruction() {
     return (
-        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0E0E10] px-6 text-center text-[#F6F3EE]">
+        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#140309] px-6 text-center text-[#F6F3EE]">
             <div className="relative mb-8">
                 <div className="absolute -inset-4 rounded-full bg-[#C7A24B]/5 blur-xl"></div>
                 <h1 className="relative font-serif text-4xl font-light tracking-wide text-[#F6F3EE] md:text-5xl">
