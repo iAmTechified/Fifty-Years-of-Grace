@@ -187,13 +187,13 @@ export default function Story() {
                                         <img
                                             src={storyData[activeIndex].image}
                                             alt={storyData[activeIndex].title}
-                                            className="absolute inset-0 w-full h-full object-cover"
+                                            className="absolute inset-0 w-full h-full object-cover object-top"
                                         />
 
                                         {/* Example Placeholder */}
-                                        <div className="absolute inset-0 flex items-center justify-center opacity-10 font-serif text-9xl italic">
+                                        {/* <div className="absolute inset-0 flex items-center justify-center opacity-10 font-serif text-9xl italic">
                                             {activeIndex + 1}
-                                        </div>
+                                        </div> */}
                                     </motion.div>
                                 </AnimatePresence>
                             </div>

@@ -27,9 +27,9 @@ interface GalleryImage {
 // --- DATA ---
 const FALLBACK_IMAGES: GalleryImage[] = [
     { id: 'f1', src: './Mrs. Obele Akinniranye close up shot.jpg', alt: 'Mrs. Obele Akinniranye Throwback Photo', rotation: -2, scale: 1, type: 'throwback' },
-    { id: 'f2', src: './Mr. Obele Akinniranye selfie.jpg', alt: 'Mr. Obele Akinniranye Throwback Photo', rotation: 3, scale: 0.95, type: 'throwback' },
+    { id: 'f2', src: './Mrs. Obele Akinniranye selfie.jpg', alt: 'Mr. Obele Akinniranye Throwback Photo', rotation: 3, scale: 0.95, type: 'throwback' },
     { id: 'f3', src: './Mrs. Obele Akinniranye selfie 2.jpg', alt: 'Mrs. Obele Akinniranye Throwback Photo', rotation: -1, scale: 1.05, type: 'throwback' },
-    { id: 'f4', src: './Mr. Obele Akinniranye selfie 3.jpg', alt: 'Mr. Obele Akinniranye Throwback Photo', rotation: 2, scale: 0.9, type: 'throwback' },
+    { id: 'f4', src: './Mrs. Obele Akinniranye selfie 3.jpg', alt: 'Mr. Obele Akinniranye Throwback Photo', rotation: 2, scale: 0.9, type: 'throwback' },
     { id: 'f5', src: './Mrs. Obele Akinniranye smiling selfie.jpg', alt: 'Mrs. Obele Akinniranye Throwback Photo', rotation: -3, scale: 1, type: 'throwback' },
 ];
 
