@@ -17,7 +17,7 @@ export default function ScrollProgress() {
     const y = useTransform(scaleX, [0, 1], [0, TRACK_HEIGHT]);
 
     return (
-        <div className="fixed left-3 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center justify-center gap-4">
+        <div className="fixed left-3 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center justify-center gap-4 scale-75 md:scale-100 origin-left">
             {/* Top Decor */}
             <div className="w-[1px] h-8 bg-gradient-to-b from-transparent to-white/20" />
 

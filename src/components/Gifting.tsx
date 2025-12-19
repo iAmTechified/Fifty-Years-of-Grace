@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { recordTransaction } from '@/lib/firebase-services';
 
 // Types
 type GiftOption = {
@@ -181,15 +182,35 @@ function GiftModal({ gift, onClose }: { gift: GiftOption; onClose: () => void })
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: ''
+    });
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        // Simulate API/Payment transition
-        setTimeout(() => {
-            setIsLoading(false);
-            alert(`Proceeding to secure payment for ${gift.title}`);
+
+        try {
+            await recordTransaction({
+                donorName: formData.name,
+                email: formData.email,
+                amount: gift.value === 'Open' ? 0 : parseInt(gift.value.replace(/\D/g, '')), // Basic parsing
+                currency: 'USD',
+                message: `Gifted: ${gift.title}`,
+                reference: `REF-${Date.now()}`, // Simulated reference
+                status: 'pending' // In real app, this would depend on payment gateway
+            });
+
+            alert(`Thank you, ${formData.name}! You will be redirected to payment for ${gift.title}.`);
             onClose();
-        }, 1500);
+        } catch (error) {
+            console.error("Transaction error:", error);
+            alert("Something went wrong. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -236,6 +257,8 @@ function GiftModal({ gift, onClose }: { gift: GiftOption; onClose: () => void })
                             <input
                                 required
                                 type="text"
+                                value={formData.name}
+                                onChange={e => setFormData({ ...formData, name: e.target.value })}
                                 className="w-full bg-white border-b border-[#0E0E10]/20 p-3 text-[#0E0E10] font-sans focus:outline-none focus:border-[#C7A24B] transition-colors"
                                 placeholder="First & Last Name"
                             />
@@ -246,6 +269,8 @@ function GiftModal({ gift, onClose }: { gift: GiftOption; onClose: () => void })
                             <input
                                 required
                                 type="email"
+                                value={formData.email}
+                                onChange={e => setFormData({ ...formData, email: e.target.value })}
                                 className="w-full bg-white border-b border-[#0E0E10]/20 p-3 text-[#0E0E10] font-sans focus:outline-none focus:border-[#C7A24B] transition-colors"
                                 placeholder="name@example.com"
                             />
@@ -255,6 +280,8 @@ function GiftModal({ gift, onClose }: { gift: GiftOption; onClose: () => void })
                             <label className="block text-xs uppercase tracking-wider text-[#0E0E10]/50 ml-1">Phone (Optional)</label>
                             <input
                                 type="tel"
+                                value={formData.phone}
+                                onChange={e => setFormData({ ...formData, phone: e.target.value })}
                                 className="w-full bg-white border-b border-[#0E0E10]/20 p-3 text-[#0E0E10] font-sans focus:outline-none focus:border-[#C7A24B] transition-colors"
                                 placeholder="+1 (555) 000-0000"
                             />

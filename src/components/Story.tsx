@@ -8,25 +8,33 @@ const storyData = [
         id: 1,
         text: "She moves with a quiet grace, a presence that doesn't demand attention but naturally commands it.",
         highlight: "grace",
-        imageColor: "from-[#1a1a1a] to-[#2a2a2a]" // Placeholder for image
+        imageColor: "from-[#1a1a1a] to-[#2a2a2a]", // Placeholder for image
+        image: "./Mrs. Obele Akinniranye.jpg",
+        title: "Mrs. Obele Akinniranye"
     },
     {
         id: 2,
         text: "In every room she enters, warmth follows—a testament to a heart that has learned the art of giving.",
         highlight: "giving",
-        imageColor: "from-[#2a2a2a] to-[#3a3a3a]"
+        imageColor: "from-[#2a2a2a] to-[#3a3a3a]",
+        image: "./Mr. Obele Akinniranye Portrait.jpg",
+        title: "Mr. Obele Akinniranye"
     },
     {
         id: 3,
         text: "Challenges haven't hardened her; they've only revealed the diamond-strength of her spirit.",
         highlight: "strength",
-        imageColor: "from-[#3a3a3a] to-[#4a4a4a]"
+        imageColor: "from-[#3a3a3a] to-[#4a4a4a]",
+        image: "./Mrs. Obele Akinniranye Full shot.jpg",
+        title: "Mrs. Obele Akinniranye"
     },
     {
         id: 4,
         text: "Fifty years of weaving stories, not just for herself, but for everyone lucky enough to be part of her tapestry.",
         highlight: "tapestry",
-        imageColor: "from-[#1a1a1a] to-[#2a2a2a]"
+        imageColor: "from-[#3a3a3a] to-[#4a4a4a]",
+        image: "./Mrs. Obele Akinniranye Full shot 2.jpg",
+        title: "Mrs. Obele Akinniranye"
     }
 ];
 
@@ -45,16 +53,18 @@ const StoryBlock = ({ item, index, setIndex }: { item: typeof storyData[0], inde
     // Let's use simpler Intersection logic via onViewportEnter/onUpdate if we want strict index tracking,
     // OR use raw scroll progress to drive opacity/blur.
 
-    // We want the "snap" focus feel. 
-    // Mapping: 0.5 is center. 
-    const opacity = useTransform(scrollYProgress, [0.3, 0.5, 0.7], [0.3, 1, 0.3]);
-    const scale = useTransform(scrollYProgress, [0.3, 0.5, 0.7], [0.92, 1, 0.92]);
-    const blur = useTransform(scrollYProgress, [0.3, 0.5, 0.7], [4, 0, 4]);
+    // We want the text to be visible when snapped (centered) but fade out quickly as it scrolls past
+    // to avoid overlapping/clutter with the next item or the sticky header.
+    // Range focused around 0.5 (center).
+    const opacity = useTransform(scrollYProgress, [0.2, 0.45, 0.55, 0.8], [0, 1, 1, 0]);
+    const scale = useTransform(scrollYProgress, [0.2, 0.45, 0.55, 0.8], [0.85, 1, 1, 0.85]);
+    const blur = useTransform(scrollYProgress, [0.2, 0.45, 0.55, 0.8], [8, 0, 0, 8]);
 
     // We use a listener to update the global index state for the image container
     useEffect(() => {
         const unsubscribe = scrollYProgress.on("change", (latest) => {
-            if (latest > 0.45 && latest < 0.55) {
+            // Trigger image change when text is near the center
+            if (latest > 0.4 && latest < 0.6) {
                 setIndex(index);
             }
         });
@@ -65,9 +75,10 @@ const StoryBlock = ({ item, index, setIndex }: { item: typeof storyData[0], inde
         <motion.div
             ref={ref}
             style={{ opacity, scale, filter: useMotionTemplate`blur(${blur}px)` }}
-            className="flex items-center justify-start max-w-lg mx-auto p-8"
+            className="h-full flex flex-col items-center justify-between md:justify-center max-w-lg mx-auto p-8 pt-15"
         >
-            <p className="text-3xl md:text-4xl leading-relaxed font-sans font-light text-[#F6F3EE]/90">
+            <div className='md:hidden h-full w-full'></div>
+            <p className="h-[85%] md:h-auto text-2xl md:text-4xl leading-relaxed font-sans font-light text-[#F6F3EE]/90">
                 {item.text.split(" ").map((word, i) => {
                     const isHighlight = word.toLowerCase().includes(item.highlight.toLowerCase());
                     return (
@@ -137,15 +148,14 @@ export default function Story() {
             className="relative w-full bg-[#0E0E10] text-[#F6F3EE]"
             onMouseMove={handleMouseMove}
         >
+
             {/* Introductory Title (Optional/Subtle) */}
-            <div className="w-full text-center py-24 opacity-30 uppercase tracking-[0.3em] text-xs font-serif">
+            <div className="w-full text-center py-12 md:py-24 opacity-30 uppercase tracking-[0.3em] text-xs font-serif">
                 Her Story
             </div>
-
-            <div className="relative w-full flex flex-row md:flex-row items-start">
-
+            <div className="relative w-full flex flex-col md:flex-row items-start">
                 {/* LEFT: Sticky Image Container */}
-                <div className="hidden md:flex w-1/2 h-screen sticky top-0 self-start items-center justify-center p-12">
+                <div className="flex w-full md:w-1/2 h-[45vh] md:h-screen sticky top-[8vh] md:top-0 self-start items-center justify-center p-3 md:p-12 z-20">
 
                     {/* Perspective Context */}
                     <div className="relative w-full h-full flex items-center justify-center perspective-[1000px]">
@@ -155,7 +165,7 @@ export default function Story() {
                                 rotateY: springRotateY,
                                 transformStyle: "preserve-3d"
                             }}
-                            className="relative w-full aspect-[4/5] max-w-md"
+                            className="relative w-auto h-full md:h-auto md:w-full aspect-[4/5] max-w-md max-h-full"
                         >
                             {/* Image Transitions */}
                             <div className="relative w-full h-full rounded-sm overflow-hidden shadow-2xl bg-[#1a1a1a]">
@@ -171,6 +181,13 @@ export default function Story() {
                                         {/* Placeholder visual noise/texture */}
                                         <div className="absolute inset-0 opacity-20 mix-blend-overlay"
                                             style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
+                                        />
+
+                                        {/* Image */}
+                                        <img
+                                            src={storyData[activeIndex].image}
+                                            alt={storyData[activeIndex].title}
+                                            className="absolute inset-0 w-full h-full object-cover"
                                         />
 
                                         {/* Example Placeholder */}
@@ -192,7 +209,7 @@ export default function Story() {
                     {storyData.map((item, index) => (
                         <div
                             key={item.id}
-                            className="h-screen w-full flex items-center justify-center snap-center snap-always relative"
+                            className="h-screen w-full flex items-center justify-center snap-end md:snap-center snap-always relative pb-0"
                         >
                             <StoryBlock
                                 item={item}

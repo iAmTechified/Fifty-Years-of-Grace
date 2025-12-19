@@ -95,7 +95,7 @@ export default function Dedication() {
         <motion.section
             ref={containerRef}
             style={{ borderTopLeftRadius: topRadius, borderTopRightRadius: topRadius }}
-            className="relative w-full min-h-[50vh] h-[80vh] py-3 md:py-6 bg-[#0E0E10] text-[#F6F3EE] overflow-hidden z-20"
+            className="relative w-full min-h-[50vh] h-screen md:h-[80vh] py-3 md:py-6 bg-[#0E0E10] text-[#F6F3EE] overflow-hidden z-20"
         >
             {/* Background Texture */}
             <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none mix-blend-overlay"
@@ -105,7 +105,7 @@ export default function Dedication() {
             <div className="relative w-full max-w-[1400px] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
 
                 {/* Left Column - Visual Subject (Fireworks/Sparkles) */}
-                <div className="md:col-span-4 h-[400px] md:h-[600px] relative flex items-center justify-center scale-150">
+                <div className="md:col-span-4 h-[250px] md:h-[600px] relative flex items-center justify-center scale-150">
                     {/* Container for the effect - moves subtly with scroll maybe? */}
                     <div className="relative w-full h-full max-w-[400px] mx-auto opacity-60">
                         <FireworkCluster />
@@ -117,25 +117,25 @@ export default function Dedication() {
                 </div>
 
                 {/* Right Column - Text Content */}
-                <div className="-ml-5 md:-ml-10 lg:-ml-16 md:col-span-8 flex flex-col justify-center items-start md:items-end text-left md:text-right space-y-1 md:space-y-2 pl-0 md:pl-12">
+                <div className="ml-2 md:-ml-10 lg:-ml-16 md:col-span-8 flex flex-col justify-center items-start md:items-end text-left md:text-right space-y-1 md:space-y-2 pl-0 md:pl-12">
 
                     {/* Block 1 */}
                     <div className="w-full md:max-w-2xl">
-                        <TextReveal delay={0} className="font-bold text-2xl md:text-2xl lg:text-2xl font-sans leading-tight">
+                        <TextReveal delay={0} className="font-bold text-xl md:text-2xl lg:text-2xl font-sans leading-tight">
                             This is a birthday to be celebrated.
                         </TextReveal>
                     </div>
 
                     {/* Block 2 */}
                     <div className="w-full md:max-w-2xl">
-                        <TextReveal delay={0.5} className="text-xl md:text-xl lg:text-xl font-sans font-light leading-relaxed tracking-wide">
+                        <TextReveal delay={0.5} className="text-lg md:text-xl lg:text-xl font-sans font-light leading-relaxed tracking-wide">
                             Fifty years, not just counted, but enjoyed — through laughter, connection, and the quiet joy of being surrounded by those who matter most.
                         </TextReveal>
                     </div>
 
                     {/* Block 3 */}
                     <div className="w-full md:max-w-2xl">
-                        <TextReveal delay={1.5} className="text-primary text-lg md:text-lg lg:text-lg font-serif text-[#C7A24B] italic leading-tight">
+                        <TextReveal delay={1.5} className="text-primary text-base md:text-lg lg:text-lg font-serif text-[#C7A24B] italic leading-tight">
                             Today, we celebrate her and the golden moment she stands in.
                         </TextReveal>
                     </div>

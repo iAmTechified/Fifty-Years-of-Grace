@@ -61,7 +61,7 @@ export default function Celebration({ onOpenModal }: { onOpenModal: () => void }
 
                 {/* Cards Container with Perspective */}
                 <div
-                    className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 w-full"
+                    className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 w-[90%] md:w-full"
                     style={{ perspective: "1000px" }}
                 >
                     {schedule.map((item, i) => (

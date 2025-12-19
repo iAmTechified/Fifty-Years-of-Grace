@@ -31,9 +31,9 @@ export default function RootLayout({
     <html lang="en" className={`${spaceGrotesk.variable} ${canela.variable}`}>
       <body className="antialiased min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-accent selection:text-background">
         <div className="md:hidden">
-          <MobileUnderConstruction />
+          {/* <MobileUnderConstruction /> */}
         </div>
-        <div className="hidden md:block">
+        <div className="">
           {children}
         </div>
       </body>

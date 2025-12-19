@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // RSVPs: Anyone can submit
+    // ALLOW ADMIN READ/UPDATE:
+    // In a real app, use: allow read, update: if request.auth != null;
+    // For now, enabling read/write for all to allow the admin panel to work without Auth implementation
+    match /rsvps/{rsvp} {
+      allow create: if true; 
+      allow read, update: if true; 
+    }
+
+    // Birthday Notes: Everyone can read and write
+    match /birthday_notes/{note} {
+      allow read, create: if true;
+    }
+
+    // Transactions: Submit only
+    match /transactions/{txn} {
+      allow create: if true;
+      allow read: if false; // Keep private (Or true if admin needs to see them)
+    }
+
+     // Media Gallery: Everyone can read and write
+    match /media_gallery/{media} {
+      allow read, create: if true;
+    }
+    
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
