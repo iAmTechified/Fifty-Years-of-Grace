@@ -5,19 +5,19 @@ import { motion, useInView } from 'framer-motion';
 
 const schedule = [
     {
-        day: "Day One",
-        title: "An intimate welcome",
-        desc: "An evening of warmth, connection, and quiet celebration as the moment begins."
+        day: "JUNE 26TH, 2026",
+        title: "Exclusive Dublin Tour",
+        desc: "Visiting the best places in Dublin with the celebrant"
     },
     {
-        day: "Day Two",
-        title: "The heart of the celebration",
-        desc: "A day filled with joy, shared moments, and the fullness of togetherness."
+        day: "JUNE 27TH, 2026",
+        title: "Birthday Dinner with Obele",
+        desc: "A dinner with good food, good vibes, and even better company."
     },
     {
-        day: "Day Three",
-        title: "A graceful close",
-        desc: "A reflective and joyful conclusion, celebrating the memories made and the season ahead."
+        day: "JUNE 28TH, 2026",
+        title: "Birthday Thanksgiving Day",
+        desc: "Counting blessings, not years, and grateful for life, growth, and God’s goodness."
     }
 ];
 
@@ -49,13 +49,11 @@ export default function Celebration({ onOpenModal }: { onOpenModal: () => void }
                     className="text-center mb-24 md:mb-32 space-y-8"
                 >
                     <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-[#F6F3EE]">
-                        The Celebration Unfolds
+                        Three Days Fun
+                        Celebration Itinerary
                     </h2>
                     <div className="flex flex-col items-center gap-4">
                         <div className="w-px h-12 bg-gradient-to-b from-[#C7A24B]/0 via-[#C7A24B]/40 to-[#C7A24B]/0" />
-                        <p className="font-sans text-xs md:text-sm font-light tracking-[0.2em] uppercase text-[#F6F3EE]/60 max-w-md mx-auto">
-                            A thoughtfully curated celebration spanning three special days.
-                        </p>
                     </div>
                 </motion.div>
 
@@ -88,7 +86,7 @@ export default function Celebration({ onOpenModal }: { onOpenModal: () => void }
                             />
 
                             {/* Content Wrapper */}
-                            <div className="relative z-10 flex flex-col items-center gap-6">
+                            <div className="relative z-10 flex flex-col items-center gap-3">
 
                                 {/* Background Day Number */}
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[160px] font-serif text-[#F6F3EE] opacity-[0.02] pointer-events-none select-none leading-none -mt-4 transition-transform duration-1000 group-hover:scale-105">
@@ -101,7 +99,7 @@ export default function Celebration({ onOpenModal }: { onOpenModal: () => void }
                                 </span>
 
                                 {/* Title */}
-                                <h3 className="font-serif text-2xl md:text-3xl text-[#F6F3EE] leading-tight">
+                                <h3 className="font-serif text-2xl md:text-3xl text-[#F6F3EE] leading-tight min-h-[5rem]">
                                     {item.title}
                                 </h3>
 
@@ -125,10 +123,10 @@ export default function Celebration({ onOpenModal }: { onOpenModal: () => void }
                     className="mt-24"
                 >
                     <button
-                        className="group relative px-8 py-4 bg-transparent border border-[#F6F3EE]/20 hover:border-[#C7A24B] transition-colors duration-500 overflow-hidden"
+                        className="group relative px-8 py-4 bg-accent border border-[#F6F3EE]/20 group-hover:bg-[#140309]/80 hover:border-[#C7A24B] transition-colors duration-500 overflow-hidden"
                         onClick={onOpenModal}
                     >
-                        <span className="relative z-10 font-sans text-[11px] tracking-[0.2em] uppercase text-[#F6F3EE] group-hover:text-[#C7A24B] transition-colors duration-300">
+                        <span className="relative z-10 font-sans text-[11px] tracking-[0.2em] uppercase text-[#140309] group-hover:text-[#140309] transition-colors duration-300">
                             Request Invitation
                         </span>
                     </button>

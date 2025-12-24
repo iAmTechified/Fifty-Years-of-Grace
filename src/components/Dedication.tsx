@@ -121,24 +121,24 @@ export default function Dedication() {
 
                     {/* Block 1 */}
                     <div className="w-full md:max-w-2xl">
-                        <TextReveal delay={0} className="font-bold text-xl md:text-2xl lg:text-2xl font-sans leading-tight">
-                            This is a birthday to be celebrated.
+                        <TextReveal delay={0} className="font-bold text-4xl md:text-5xl lg:text-6xl font-sans leading-tight">
+                            Fifty years, not just counted, but enjoyed
                         </TextReveal>
                     </div>
 
                     {/* Block 2 */}
-                    <div className="w-full md:max-w-2xl">
+                    {/* <div className="w-full md:max-w-2xl">
                         <TextReveal delay={0.5} className="text-lg md:text-xl lg:text-xl font-sans font-light leading-relaxed tracking-wide">
                             Fifty years, not just counted, but enjoyed — through laughter, connection, and the quiet joy of being surrounded by those who matter most.
                         </TextReveal>
-                    </div>
+                    </div> */}
 
                     {/* Block 3 */}
-                    <div className="w-full md:max-w-2xl">
+                    {/* <div className="w-full md:max-w-2xl">
                         <TextReveal delay={1.5} className="text-primary text-base md:text-lg lg:text-lg font-serif text-[#C7A24B] italic leading-tight">
                             Today, we celebrate her and the golden moment she stands in.
                         </TextReveal>
-                    </div>
+                    </div> */}
 
                 </div>
 

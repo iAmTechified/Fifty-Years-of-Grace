@@ -12,7 +12,7 @@ type GiftOption = {
     title: string;
     description: string;
     value: string;
-    symbol?: string; // Optional abstract symbol/icon placeholder
+    image: string;
 };
 
 const GIFT_OPTIONS: GiftOption[] = [
@@ -21,42 +21,42 @@ const GIFT_OPTIONS: GiftOption[] = [
         title: 'A Toast Together',
         description: 'A bottle of fine vintage champagne to share.',
         value: '$150',
-        symbol: '🥂',
+        image: './wine.jpg',
     },
     {
         id: '2',
         title: 'The Spa Retreat',
         description: 'A moment of serenity and relaxation.',
         value: '$300',
-        symbol: '🌿',
+        image: './spa.jpg',
     },
     {
         id: '3',
         title: 'Evening of Jazz',
         description: 'Tickets to an intimate live performance.',
         value: '$200',
-        symbol: '🎷',
+        image: './jazz.jpg',
     },
     {
         id: '4',
         title: 'Culinary Journey',
         description: 'A private dining experience for two.',
         value: '$500',
-        symbol: '🍽️',
+        image: './dinning.jpg',
     },
     {
         id: '5',
         title: 'The Great Escape',
         description: 'Contribution towards a weekend getaway.',
         value: '$1,000',
-        symbol: '✈️',
+        image: './getaway.jpg',
     },
     {
         id: '6',
         title: 'Custom Gesture',
         description: 'A gift of your own choosing.',
         value: 'Open',
-        symbol: '🎁',
+        image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80',
     },
 ];
 
@@ -139,38 +139,45 @@ function GiftCard({ gift, index, onSelect }: { gift: GiftOption; index: number; 
                 ease: [0.22, 1, 0.36, 1]
             }}
             viewport={{ once: true }}
-            className="group relative flex flex-col items-center text-center p-10 bg-white border border-[#140309]/5 rounded-sm hover:border-[#C7A24B]/40 transition-colors duration-500 cursor-pointer"
+            className="group relative flex flex-col bg-white border border-[#140309]/5 rounded-sm hover:border-[#C7A24B]/40 transition-colors duration-500 cursor-pointer overflow-hidden"
             onClick={onSelect}
             data-cursor-text="Gift"
             whileHover={{ y: -5, boxShadow: "0 10px 40px -10px rgba(0,0,0,0.05)" }}
         >
-            {/* Symbol */}
-            <div className="mb-6 text-4xl opacity-50 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 grayscale group-hover:grayscale-0">
-                {gift.symbol}
+            {/* Image Banner */}
+            <div className="relative w-full h-48 overflow-hidden">
+                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500 z-10" />
+                <img
+                    src={gift.image}
+                    alt={gift.title}
+                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
+                />
             </div>
 
-            {/* Title */}
-            <h3 className="text-2xl font-serif mb-3 text-[#140309] group-hover:text-[#C7A24B] transition-colors duration-300">
-                {gift.title}
-            </h3>
+            <div className="p-8 flex flex-col flex-grow text-center items-center">
+                {/* Title */}
+                <h3 className="text-2xl font-serif mb-3 text-[#140309] group-hover:text-[#C7A24B] transition-colors duration-300">
+                    {gift.title}
+                </h3>
 
-            {/* Description */}
-            <p className="text-sm font-sans text-[#140309]/60 mb-6 leading-relaxed">
-                {gift.description}
-            </p>
+                {/* Description */}
+                <p className="text-sm font-sans text-[#140309]/60 mb-6 leading-relaxed">
+                    {gift.description}
+                </p>
 
-            {/* Value */}
-            <div className="mt-auto mb-6">
-                <span className="font-serif text-lg text-[#140309] opacity-80 border-b border-[#C7A24B]/30 pb-1">
-                    {gift.value}
-                </span>
-            </div>
+                {/* Value */}
+                <div className="mt-auto mb-2">
+                    <span className="font-serif text-lg text-[#140309] opacity-80 border-b border-[#C7A24B]/30 pb-1">
+                        {gift.value}
+                    </span>
+                </div>
 
-            {/* CTA (Hidden until hover) */}
-            <div className="absolute bottom-8 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-100">
-                <span className="text-xs uppercase tracking-widest font-sans font-medium text-[#C7A24B]">
-                    Gift This
-                </span>
+                {/* CTA (Hidden until hover - aligned with value or separate) */}
+                <div className="h-4 overflow-hidden mt-4">
+                    <span className="block text-xs uppercase tracking-widest font-sans font-medium text-[#C7A24B] translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                        Gift This
+                    </span>
+                </div>
             </div>
         </motion.div>
     );

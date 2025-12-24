@@ -8,6 +8,7 @@
   --accent: #C7A24B;
   --font-serif: var(--font-canela);
   --font-sans: var(--font-space-grotesk);
+  --font-cursive: var(--font-great-vibes);
 }
 
 html {

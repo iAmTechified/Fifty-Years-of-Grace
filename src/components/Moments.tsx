@@ -193,7 +193,7 @@ export default function Moments() {
                             {galleryImages.map((img, i) => (
                                 <motion.div
                                     key={img.id}
-                                    className={`relative w-full h-full overflow-hidden rounded-sm filter grayscale-[30%] hover:grayscale-0 transition-all duration-700 ease-out cursor-pointer
+                                    className={`relative w-full h-full overflow-hidden rounded-md filter grayscale-[30%] hover:grayscale-0 transition-all duration-700 ease-out cursor-pointer
                                     ${i === 0 ? 'md:col-span-2 md:row-span-2' : ''}
                                     ${i === 1 ? 'md:mt-8 md:-ml-4' : ''}
                                     ${i === 2 ? 'md:mt-16 md:ml-4' : ''}
@@ -266,7 +266,7 @@ export default function Moments() {
                                         exit={{ opacity: 0, x: -20 }}
                                         transition={{ duration: 0.5 }}
                                         onClick={() => setShowNoteDetailModal(wishes[currentWishIndex])}
-                                        className="absolute inset-0 bg-[#F6F3EE]/[0.03] backdrop-blur-sm p-8 border border-[#F6F3EE]/10 rounded-sm cursor-pointer hover:bg-[#F6F3EE]/[0.05] transition-colors"
+                                        className="absolute inset-0 bg-[#F6F3EE]/[0.03] backdrop-blur-sm p-8 border border-[#F6F3EE]/10 rounded-md cursor-pointer hover:bg-[#F6F3EE]/[0.05] transition-colors"
                                     >
                                         <div className="h-full flex flex-col justify-between">
                                             <p className="font-sans text-[#F6F3EE]/90 text-xl leading-relaxed font-light line-clamp-5">
@@ -438,7 +438,7 @@ function WishFormModal({ onClose, onSubmit }: { onClose: () => void, onSubmit: (
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="relative w-full max-w-lg bg-[#141416] border border-[#F6F3EE]/10 p-8 md:p-12 shadow-2xl"
+                className="relative w-full max-w-lg bg-[#140309] border border-[#F6F3EE]/10 p-8 md:p-12 shadow-2xl"
             >
                 <button
                     onClick={onClose}

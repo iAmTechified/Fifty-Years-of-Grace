@@ -16,6 +16,9 @@ const config: Config = {
             fontFamily: {
                 sans: ["var(--font-sans)", "sans-serif"],
                 serif: ["var(--font-serif)", "serif"],
+                cursive: ["var(--font-cursive)", "cursive"],
+                libre: ["var(--font-libre-bodoni)", "serif"],
+                better: ["var(--font-better-together)", "cursive"],
             },
         },
     },

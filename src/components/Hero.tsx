@@ -3,8 +3,18 @@
 import { useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import confetti from 'canvas-confetti';
 import CustomCursor from './CustomCursor';
 import Magnetic from './Magnetic';
+
+const bgImages = [
+    '/Mrs. Obele Akinniranye Portrait.jpg',
+    '/Mrs. Obele Akinniranye Full shot 2.jpg',
+    '/Mrs. Obele Akinniranye Full shot.jpg',
+    '/Mrs. Obele Akinniranye Mid shot.jpg',
+    '/Mrs. Obele Akinniranye selfie.jpg',
+    '/Mrs. Obele Akinniranye smiling selfie.jpg'
+];
 
 const CountdownDigit = ({ digit }: { digit: string }) => {
     return (
@@ -92,7 +102,6 @@ const CTAButton = ({ onClick }: { onClick: () => void }) => (
             className="relative flex items-center justify-center w-24 h-24 rounded-full bg-[#0a0104]/80 backdrop-blur-md border border-[#C7A24B]/30 text-[#C7A24B] group overflow-hidden"
             aria-label="RSVP"
         >
-            {/* Rotating Text Ring */}
             <motion.div
                 className="absolute inset-0 w-full h-full"
                 animate={{ rotate: 360 }}
@@ -109,11 +118,7 @@ const CTAButton = ({ onClick }: { onClick: () => void }) => (
                     </text>
                 </svg>
             </motion.div>
-
-            {/* Center Text */}
             <span className="relative z-10 font-serif italic text-lg">RSVP</span>
-
-            {/* Hover Fill */}
             <div className="absolute inset-0 bg-[#C7A24B] rounded-full scale-0 group-hover:scale-100 transition-transform duration-500 ease-out -z-0 opacity-10" />
         </button>
     </Magnetic>
@@ -121,8 +126,8 @@ const CTAButton = ({ onClick }: { onClick: () => void }) => (
 
 export default function Hero({ isModalOpen, onOpenModal }: { isModalOpen: boolean, onOpenModal: () => void }) {
     const [mounted, setMounted] = useState(false);
-    // const [isModalOpen, setIsModalOpen] = useState(false); // NOW USING PROPS
     const [isSticky, setIsSticky] = useState(false);
+    const [currentBgIndex, setCurrentBgIndex] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const { scrollY } = useScroll();
@@ -144,14 +149,97 @@ export default function Hero({ isModalOpen, onOpenModal }: { isModalOpen: boolea
         return () => clearTimeout(timer);
     }, []);
 
-    const headlineFirst = "Fifty Years";
-    const headlineSecond = "of Grace";
-    const subheadline = "An invitation to honor, reflect, and celebrate.";
+    // Background slideshow
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentBgIndex((prev) => (prev + 1) % bgImages.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
+
+    // Confetti Effect
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    useEffect(() => {
+        if (canvasRef.current) {
+            const myConfetti = confetti.create(canvasRef.current, {
+                resize: true,
+                useWorker: true
+            });
+
+            // Fire confetti matching the text reveal (approx 1.2s delay)
+            const fire = () => {
+                const duration = 3000;
+                const end = Date.now() + duration;
+
+                // Frame loop for a continuous but short "fountain" or just simple bursts
+                // Let's do a few specific bursts for a cleaner look under the text
+
+                // Burst 1
+                setTimeout(() => {
+                    myConfetti({
+                        particleCount: 100,
+                        spread: 100,
+                        origin: { y: 0.5 },
+                        colors: ['#C7A24B', '#F6F3EE', '#ffffff'],
+                        startVelocity: 30,
+                        gravity: 0.8,
+                        scalar: 1,
+                    });
+                }, 1500); // Matches the text reveal roughly
+
+                // Burst 2
+                setTimeout(() => {
+                    myConfetti({
+                        particleCount: 50,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0 },
+                        colors: ['#C7A24B', '#F6F3EE'],
+                    });
+                    myConfetti({
+                        particleCount: 50,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1 },
+                        colors: ['#C7A24B', '#F6F3EE'],
+                    });
+                }, 2000);
+            };
+
+            fire();
+
+            return () => {
+                myConfetti.reset();
+            }
+        }
+    }, []);
 
     return (
         <section ref={containerRef} className="fixed inset-0 h-screen w-full overflow-hidden bg-[#140309] text-[#F6F3EE] z-0">
 
-            {/* Cinematic Fog */}
+            {/* Background Slideshow */}
+            <div className="absolute inset-0 z-0">
+                <AnimatePresence mode="popLayout">
+                    <motion.div
+                        key={currentBgIndex}
+                        initial={{ opacity: 0, scale: 1.1 }}
+                        animate={{ opacity: 0.3, scale: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 2, ease: "easeInOut" }}
+                        className="absolute inset-0 w-full h-full bg-cover bg-center"
+                        style={{
+                            backgroundImage: `url('${bgImages[currentBgIndex]}')`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "top",
+                            filter: 'grayscale(0.3) brightness(0.7)'
+                        }}
+                    />
+                </AnimatePresence>
+                {/* Gradient Overlay for better text legibility */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#140309] via-[#140309]/50 to-transparent opacity-90" />
+            </div>
+
+            {/* Cinematic Fog/Grain */}
             <div className="absolute inset-0 pointer-events-none z-0 opacity-40 mix-blend-screen">
                 <svg className='w-full h-full opacity-30' xmlns="http://www.w3.org/2000/svg">
                     <filter id='fog-filter'>
@@ -161,76 +249,92 @@ export default function Hero({ isModalOpen, onOpenModal }: { isModalOpen: boolea
                     <rect width='100%' height='100%' filter='url(#fog-filter)' />
                 </svg>
             </div>
-
-            {/* Texture Overlay */}
             <div className="grain-overlay pointer-events-none absolute inset-0 z-10 opacity-[0.04] mix-blend-overlay" />
 
-            {/* Ambient Light */}
-            <div
-                className={`absolute top-[-20%] left-[20%] w-[60vw] h-[60vw] bg-[#C7A24B] rounded-full blur-[180px] opacity-[0.02] animate-pulse-slow pointer-events-none z-0 transition-opacity duration-[3000ms] ${mounted ? 'opacity-[0.02]' : 'opacity-0'}`}
+            {/* Confetti - Layered under text (z-15) but above bg */}
+            <canvas
+                ref={canvasRef}
+                className="absolute inset-0 w-full h-full pointer-events-none z-[15]"
             />
 
             <CustomCursor />
 
-            {/* --- LAYOUT GRID --- */}
-            <div className="relative z-20 w-full h-full grid grid-cols-12 grid-rows-6 p-8 md:p-12 mix-blend-screen pointer-events-none">
+            {/* Main Content */}
+            <div className="relative z-20 w-full h-full flex flex-col items-center justify-center p-8 md:p-12 pointer-events-none">
 
-                {/* 1. Sub-headline */}
-                <div className="col-span-12 md:col-span-4 row-start-2 flex items-start pointer-events-auto">
-                    <div className={`transition-all duration-[2000ms] ease-out delay-[800ms] ${mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}>
-                        <div className="w-8 h-[1px] bg-[#C7A24B]/50 mb-4" />
-                        <p className="font-sans text-xs md:text-sm font-light tracking-[0.05em] leading-relaxed text-[#F6F3EE]/60 max-w-[240px]">
-                            {subheadline}
-                        </p>
-                    </div>
-                </div>
+                <motion.div
+                    style={{ scale: titleScale, opacity: titleOpacity }}
+                    className="flex flex-col items-center justify-center text-center mt-10 md:mt-0 z-10"
+                >
+                    {/* "50" with Gold Texture */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 1.5, delay: 0.8, ease: "easeOut" }}
+                        className="font-serif relative z-10"
+                    >
+                        <div className='relative border border-green-500/0'>
+                            {/* "She's" */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 1, delay: 0.5 }}
+                                className="absolute top-20 md:top-[5rem] lg:top-[6rem] -left-[8] font-better shadow-md text-[#db7d02] text-2xl md:text-3xl lg:text-4xl z-20 transform -rotate-12 self-start md:self-auto"
+                            >
+                                She&apos;s
+                            </motion.div>
+                            <div
+                                className="h-auto font-libre italic text-[15rem] md:text-[18rem] lg:text-[22rem] font-bold text-transparent bg-clip-text flex flex-row gap-0 items-end"
+                                style={{
+                                    backgroundImage: "url('/gold-texture.png')",
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                    WebkitBackgroundClip: "text",
+                                    WebkitTextFillColor: "transparent",
+                                    filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.5))"
+                                }}
+                            >
 
-                {/* 2. Main Headline (Scaling on Scroll) */}
-                <div className="col-span-12 row-start-3 row-span-3 flex flex-col items-center justify-center text-center perspective-[1000px]">
-                    <motion.div style={{ scale: titleScale, opacity: titleOpacity }} className="origin-center">
-                        <h1 className="font-serif text-7xl md:text-9xl lg:text-[10rem] leading-[0.9] tracking-tight relative mb-8">
-                            {/* First Line */}
-                            <span className="block overflow-hidden relative">
-                                <span className="block">
-                                    {headlineFirst.split('').map((char, index) => (
-                                        <span
-                                            key={`l1-${index}`}
-                                            className={`inline-block transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${char === ' ' ? 'w-[0.2em]' : ''} ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-[120%] opacity-0'}`}
-                                            style={{ transitionDelay: `${200 + index * 40}ms` }}
-                                        >
-                                            {char}
-                                        </span>
-                                    ))}
-                                </span>
-                            </span>
-
-                            {/* Second Line */}
-                            <span className="block overflow-hidden relative">
-                                <span className="block italic font-light text-[#C7A24B] opacity-90 translate-x-4 md:translate-x-12">
-                                    {headlineSecond.split('').map((char, index) => (
-                                        <span
-                                            key={`l2-${index}`}
-                                            className={`inline-block transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${char === ' ' ? 'w-[0.2em]' : ''} ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-[120%] opacity-0'}`}
-                                            style={{ transitionDelay: `${600 + index * 40}ms` }}
-                                        >
-                                            {char}
-                                        </span>
-                                    ))}
-                                </span>
-                            </span>
-                        </h1>
+                                <span>5</span> <span className='text-[10rem] md:text-[14rem] lg:text-[18rem] -ml-[3rem] md:-ml-[4rem]'>0</span>
+                            </div>
+                            {/* "Sweet & Gifted" */}
+                            <motion.div
+                                initial={{ opacity: 0, y: -20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 1, delay: 1.2 }}
+                                className="absolute bottom-10 md:bottom-[3rem] lg:bottom-[4rem] -right-20 md:-right-20 lg:-right-20 shadow-md text-left font-better text-[#db7d02] text-2xl md:text-3xl lg:text-4xl z-20"
+                            >
+                                Sweet <br /> & Gifted
+                            </motion.div>
+                        </div>
                     </motion.div>
-                </div>
 
-                {/* 3. CTA & Countdown */}
-                <div className="col-span-12 row-start-6 -mt-10 flex flex-col items-center md:items-end justify-end pointer-events-auto relative">
+                </motion.div>
 
-                    <div className={`transition-all duration-[1000ms] ease-out delay-[1500ms] ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                {/* Subheadline/Info */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 2, duration: 1 }}
+                    className="absolute top-32 left-8 md:left-12 flex items-start pointer-events-auto"
+                >
+                    <div className="w-[1px] h-12 bg-[#C7A24B]/50 mr-4" />
+                    <p className="font-sans text-xs md:text-sm font-light tracking-[0.05em] leading-relaxed text-[#F6F3EE]/80 max-w-[200px]">
+                        An invitation to honor, reflect, and celebrate.
+                    </p>
+                </motion.div>
+
+                {/* CTA & Countdown */}
+                <div className="absolute bottom-8 right-8 md:right-12 flex flex-col items-end pointer-events-auto">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 1.8, duration: 1 }}
+                    >
                         <Countdown />
-                    </div>
+                    </motion.div>
 
-                    {/* Inline Button location (Under countdown) */}
-                    <div className="relative h-24 w-24 md:mr-4">
+                    <div>
                         <AnimatePresence>
                             {!isSticky && !isModalOpen && (
                                 <motion.div
@@ -238,19 +342,17 @@ export default function Hero({ isModalOpen, onOpenModal }: { isModalOpen: boolea
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.8 }}
-                                    className="absolute inset-0"
                                 >
                                     <CTAButton onClick={onOpenModal} />
                                 </motion.div>
                             )}
                         </AnimatePresence>
                     </div>
-
                 </div>
 
             </div>
 
-            {/* FIXED CTA (Portaled to Body) - Modal removed from here */}
+            {/* FIXED CTA (Portaled to Body) */}
             {mounted && createPortal(
                 <AnimatePresence>
                     {isSticky && !isModalOpen && (

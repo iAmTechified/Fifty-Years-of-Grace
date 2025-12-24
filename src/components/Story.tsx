@@ -168,7 +168,7 @@ export default function Story() {
                             className="relative w-auto h-full md:h-auto md:w-full aspect-[4/5] max-w-md max-h-full"
                         >
                             {/* Image Transitions */}
-                            <div className="relative w-full h-full rounded-sm overflow-hidden shadow-2xl bg-[#1a1a1a]">
+                            <div className="relative w-full h-full rounded-lg overflow-hidden shadow-2xl bg-[#1a1a1a]">
                                 {storyData.map((story, index) => (
                                     <motion.div
                                         key={story.id}
@@ -191,7 +191,7 @@ export default function Story() {
                                             src={story.image}
                                             alt={story.title}
                                             className="absolute inset-0 w-full h-full object-cover object-top"
-                                            loading="eager" // Ensure images load immediately
+                                            loading="lazy" // Ensure images load immediately
                                         />
                                     </motion.div>
                                 ))}
