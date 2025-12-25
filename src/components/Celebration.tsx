@@ -77,7 +77,7 @@ export default function Celebration({ onOpenModal }: { onOpenModal: () => void }
                                 delay: 0.2 + (i * 0.2),
                                 ease: [0.19, 1, 0.22, 1]
                             }}
-                            className="group relative flex flex-col items-center text-center p-8 md:p-12 border border-[#F6F3EE]/5 bg-[#F6F3EE]/[0.01] rounded-sm backdrop-blur-[2px] transition-colors duration-700 hover:border-[#C7A24B]/20"
+                            className="group relative flex flex-col items-center text-center p-8 md:p-12 border border-[#F6F3EE]/5 bg-[#F6F3EE]/[0.01] rounded-md backdrop-blur-[2px] transition-colors duration-700 hover:border-[#C7A24B]/20"
                             style={{ transformStyle: "preserve-3d", backfaceVisibility: "hidden" }}
                         >
                             {/* Hover Interaction Effects */}
@@ -123,10 +123,10 @@ export default function Celebration({ onOpenModal }: { onOpenModal: () => void }
                     className="mt-24"
                 >
                     <button
-                        className="group relative px-8 py-4 bg-accent border border-[#F6F3EE]/20 group-hover:bg-[#140309]/80 hover:border-[#C7A24B] transition-colors duration-500 overflow-hidden"
+                        className="group relative px-8 py-4 bg-accent border rounded-md border-[#F6F3EE]/20 hover:bg-accent/80 hover:border-[#C7A24B] transition-colors duration-500 overflow-hidden"
                         onClick={onOpenModal}
                     >
-                        <span className="relative z-10 font-sans text-[11px] tracking-[0.2em] uppercase text-[#140309] group-hover:text-[#140309] transition-colors duration-300">
+                        <span className="relative z-10 font-sans font-black text-[14px] tracking-[0.2em] uppercase text-[#140309] group-hover:text-[#140309] transition-colors duration-300">
                             Request Invitation
                         </span>
                     </button>

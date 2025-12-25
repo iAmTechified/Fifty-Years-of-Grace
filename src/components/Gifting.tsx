@@ -139,7 +139,7 @@ function GiftCard({ gift, index, onSelect }: { gift: GiftOption; index: number; 
                 ease: [0.22, 1, 0.36, 1]
             }}
             viewport={{ once: true }}
-            className="group relative flex flex-col bg-white border border-[#140309]/5 rounded-sm hover:border-[#C7A24B]/40 transition-colors duration-500 cursor-pointer overflow-hidden"
+            className="group relative flex flex-col bg-white border border-[#140309]/5 rounded-md hover:border-[#C7A24B]/40 transition-colors duration-500 cursor-pointer overflow-hidden"
             onClick={onSelect}
             data-cursor-text="Gift"
             whileHover={{ y: -5, boxShadow: "0 10px 40px -10px rgba(0,0,0,0.05)" }}
