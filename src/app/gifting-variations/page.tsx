@@ -2,7 +2,6 @@
 
 import CelebrateWithObele from '@/components/gifting/CelebrateWithObele';
 import ExperientialTreats from '@/components/gifting/ExperientialTreats';
-import PresenceIsPresent from '@/components/gifting/PresenceIsPresent';
 import LegacyCollection from '@/components/gifting/LegacyCollection';
 import FloatingNav from '@/components/FloatingNav'; // Assuming this exists from page.tsx check
 import Footer from '@/components/Footer'; // Assuming this exists
@@ -36,7 +35,6 @@ export default function GiftingVariationsPage() {
                     <div className="text-center mb-8 opacity-50 text-sm uppercase tracking-widest border-t border-[#F6F3EE]/20 pt-8 mx-auto max-w-md">
                         Option 3: Presence is Present (Strategic & Elegant)
                     </div>
-                    <PresenceIsPresent />
                 </section>
 
                 <section>

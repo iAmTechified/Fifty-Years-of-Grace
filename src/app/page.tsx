@@ -9,6 +9,7 @@ import Gifting from '@/components/Gifting';
 import Moments from '@/components/Moments';
 import FloatingNav from '@/components/FloatingNav';
 import ScrollProgress from '@/components/ScrollProgress';
+import PresenceIsPresent from '@/components/gifting/PresenceIsPresent';
 import Footer from '@/components/Footer';
 import RsvpModal from '@/components/RsvpModal';
 
@@ -45,7 +46,7 @@ export default function Home() {
       </section>
 
       <section id="gifting">
-        <Gifting />
+        <PresenceIsPresent />
       </section>
 
       <Footer />
