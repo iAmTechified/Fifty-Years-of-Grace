@@ -34,7 +34,7 @@ export default function PresenceIsPresent() {
                     className="pt-8"
                 >
                     <a
-                        href="#wishlist"
+                        href="https://www.pocketwellapp.com/events/obele-akinniranye-661164"
                         className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#F6F3EE]/40 hover:text-[#C7A24B] transition-colors duration-300 border-b border-transparent hover:border-[#C7A24B] pb-1"
                     >
                         <span>For those who insist</span>
