@@ -95,7 +95,7 @@ export default function Dedication() {
         <motion.section
             ref={containerRef}
             style={{ borderTopLeftRadius: topRadius, borderTopRightRadius: topRadius }}
-            className="relative w-full min-h-[50vh] h-screen md:h-[80vh] py-3 md:py-6 bg-[#140309] text-[#F6F3EE] overflow-hidden z-20"
+            className="relative w-full min-h-[50vh] md:h-screen pt-20 pb-32 md:pt-32 md:pb-48 bg-[#140309] text-[#F6F3EE] overflow-hidden z-20 shadow-[0_-50px_100px_50px_rgba(20,3,9,1)]"
         >
             {/* Background Texture */}
             <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none mix-blend-overlay"
@@ -121,7 +121,7 @@ export default function Dedication() {
 
                     {/* Block 1 */}
                     <div className="w-full md:max-w-2xl">
-                        <TextReveal delay={0} className="font-bold text-4xl md:text-5xl lg:text-6xl font-sans leading-tight">
+                        <TextReveal delay={0} className="font-bold text-3xl xs:text-4xl md:text-5xl lg:text-6xl font-sans leading-tight">
                             Fifty years, not just counted, but enjoyed
                         </TextReveal>
                     </div>

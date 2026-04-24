@@ -113,7 +113,7 @@ const CTAButton = ({ onClick }: { onClick: () => void }) => (
                     </defs>
                     <text fontSize="11" className="font-mono uppercase tracking-[0.3em]">
                         <textPath href="#circlePath" startOffset="0%">
-                            Request Invitation • Request Invitation •
+                            Request         Invitation
                         </textPath>
                     </text>
                 </svg>
@@ -266,25 +266,27 @@ export default function Hero({ isModalOpen, onOpenModal }: { isModalOpen: boolea
                     style={{ scale: titleScale, opacity: titleOpacity }}
                     className="flex flex-col items-center justify-center text-center mt-10 md:mt-0 z-10"
                 >
-                    {/* "50" with Gold Texture */}
+                    {/* Locked-Position Title Container */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 1.5, delay: 0.8, ease: "easeOut" }}
-                        className="font-serif relative z-10"
+                        className="relative flex items-center justify-center"
                     >
-                        <div className='relative border border-green-500/0'>
-                            {/* "She's" */}
+                        <div className='relative'>
+                            {/* "She's" - Locked to top-left */}
                             <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 1, delay: 0.5 }}
-                                className="absolute top-20 md:top-[5rem] lg:top-[6rem] -left-[8] font-better shadow-md text-[#db7d02] text-2xl md:text-3xl lg:text-4xl z-20 transform -rotate-12 self-start md:self-auto"
+                                className="absolute top-[15%] -left-[15%] font-better text-[#db7d02] text-[clamp(1.5rem,6vw,4rem)] z-20 transform -rotate-12 whitespace-nowrap"
                             >
                                 She&apos;s
                             </motion.div>
+
+                            {/* "50" with Gold Texture */}
                             <div
-                                className="h-auto font-libre italic text-[15rem] md:text-[18rem] lg:text-[22rem] font-bold text-transparent bg-clip-text flex flex-row gap-0 items-end"
+                                className="h-auto font-libre italic text-[clamp(8rem,40vw,22rem)] font-extrabold text-transparent bg-clip-text flex flex-row gap-0 items-baseline"
                                 style={{
                                     backgroundImage: "url('/gold-texture.png')",
                                     backgroundSize: "cover",
@@ -294,47 +296,51 @@ export default function Hero({ isModalOpen, onOpenModal }: { isModalOpen: boolea
                                     filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.5))"
                                 }}
                             >
-
-                                <span>5</span> <span className='text-[10rem] md:text-[14rem] lg:text-[18rem] -ml-[3rem] md:-ml-[4rem]'>0</span>
+                                <span>5</span>
+                                <span className='text-[0.8em] -ml-[0.1em]'>0</span>
                             </div>
-                            {/* "Sweet & Gifted" */}
+
+                            {/* "Sweet & Gifted" - Locked to bottom-right */}
                             <motion.div
-                                initial={{ opacity: 0, y: -20 }}
-                                animate={{ opacity: 1, y: 0 }}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 1, delay: 1.2 }}
-                                className="absolute bottom-10 md:bottom-[3rem] lg:bottom-[4rem] -right-20 md:-right-20 lg:-right-20 shadow-md text-left font-better text-[#db7d02] text-2xl md:text-3xl lg:text-4xl z-20"
+                                className="absolute bottom-[20%] -right-[20%] text-left font-better text-[#db7d02] text-[clamp(1.5rem,6vw,4rem)] z-20 transform rotate-6 whitespace-nowrap leading-tight"
                             >
                                 Sweet <br /> & Gifted
                             </motion.div>
                         </div>
                     </motion.div>
-
                 </motion.div>
 
-                {/* Subheadline/Info */}
+                {/* Subheadline/Info - Locked to top-left on mobile */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 2, duration: 1 }}
-                    className="absolute top-32 left-8 md:left-12 flex items-start pointer-events-auto"
+                    className="absolute top-12 xs:top-16 sm:top-20 left-6 xs:left-8 md:top-32 md:left-12 flex items-start pointer-events-auto h-short:top-10"
                 >
-                    <div className="w-[1px] h-12 bg-[#C7A24B]/50 mr-4" />
-                    <p className="font-sans text-xs md:text-sm font-light tracking-[0.05em] leading-relaxed text-[#F6F3EE]/80 max-w-[200px]">
+                    <div className="w-[1px] h-6 xs:h-8 sm:h-10 md:h-12 bg-[#C7A24B]/50 mr-3 xs:mr-4" />
+                    <p className="font-sans text-[10px] xs:text-[11px] md:text-sm font-light tracking-[0.05em] leading-relaxed text-[#F6F3EE]/80 max-w-[140px] xs:max-w-[180px] md:max-w-[200px]">
                         An invitation to honor, reflect, and celebrate.
                     </p>
                 </motion.div>
 
-                {/* CTA & Countdown */}
-                <div className="absolute bottom-8 right-8 md:right-12 flex flex-col items-end pointer-events-auto">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1.8, duration: 1 }}
-                    >
-                        <Countdown />
-                    </motion.div>
+                {/* CTA & Countdown Container */}
+                <div className="absolute inset-0 z-20 pointer-events-none flex flex-col md:block">
+                    {/* Countdown - Centered bottom on mobile, right on desktop */}
+                    <div className="absolute bottom-24 xs:bottom-28 left-1/2 -translate-x-1/2 md:bottom-32 md:right-12 md:left-auto md:translate-x-0 flex flex-col items-center md:items-end pointer-events-auto scale-110 xs:scale-125 md:scale-100 h-short:scale-90 h-short:bottom-16">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 1.8, duration: 1 }}
+                        >
+                            <Countdown />
+                        </motion.div>
+                    </div>
 
-                    <div>
+                    {/* RSVP Button - Bottom right, scaled down on mobile */}
+                    <div className="absolute bottom-6 xs:bottom-8 right-6 xs:right-8 md:bottom-8 md:right-12 flex flex-col items-end pointer-events-auto scale-[0.75] xs:scale-[0.8] md:scale-100 h-short:scale-[0.6] h-short:bottom-4 h-short:right-4 origin-bottom-right">
                         <AnimatePresence>
                             {!isSticky && !isModalOpen && (
                                 <motion.div

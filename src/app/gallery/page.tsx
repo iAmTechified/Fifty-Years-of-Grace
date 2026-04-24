@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { saveMediaMetadata, getGalleryMedia } from '@/lib/firebase-services';
 import { MediaItem } from '@/lib/types';
 import Link from 'next/link';
-import { UploadDropzone } from '@/lib/uploadthing';
 
 export default function GalleryPage() {
     const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
@@ -30,29 +29,29 @@ export default function GalleryPage() {
     return (
         <main className="min-h-screen bg-[#140309] text-[#F6F3EE] pt-32 pb-20 px-6">
             {/* Navigation Bar (Simplified) */}
-            <nav className="fixed top-0 left-0 right-0 z-50 p-6 flex justify-between items-center bg-[#140309]/80 backdrop-blur-md">
-                <Link href="/" className="font-serif text-xl md:text-2xl text-[#C7A24B]">OBELE @ 50</Link>
-                <div className="flex gap-4">
-                    <Link href="/" className="text-sm font-sans uppercase tracking-widest text-[#F6F3EE]/60 hover:text-[#C7A24B] transition-colors">Home</Link>
-                </div>
+            <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-auto flex justify-between items-center bg-[#140309]/80 backdrop-blur-md px-6 py-3 rounded-full border border-white/10">
+                <Link href="/" className="font-serif text-sm xs:text-base md:text-lg text-[#C7A24B] whitespace-nowrap mr-8">OBELE @ 50</Link>
+                <Link href="/" className="text-[10px] xs:text-xs font-sans uppercase tracking-widest text-[#F6F3EE]/60 hover:text-[#C7A24B] transition-colors">Home</Link>
             </nav>
 
             <div className="container mx-auto max-w-7xl">
-                <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-                    <div>
-                        <h1 className="font-serif text-5xl md:text-7xl mb-4">The Gallery</h1>
-                        <p className="text-[#F6F3EE]/60 max-w-xl font-sans font-light">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
+                    <div className="w-full md:w-auto">
+                        <h1 className="font-serif text-4xl xs:text-5xl md:text-7xl mb-4">The Gallery</h1>
+                        <p className="text-[#F6F3EE]/60 max-w-xl font-sans font-light text-sm xs:text-base leading-relaxed">
                             A collection of moments, memories, and captured joy.
                             Share your own snapshots to add to this living archive.
                         </p>
                     </div>
 
-                    <button
-                        onClick={() => setIsUploadModalOpen(true)}
-                        className="bg-[#C7A24B] text-[#140309] px-8 py-4 uppercase text-xs tracking-[0.2em] font-bold hover:bg-[#D4B56A] transition-colors"
-                    >
-                        Upload Photo
-                    </button>
+                    <div className="w-full md:w-auto pt-4 md:pt-0">
+                        <button
+                            onClick={() => setIsUploadModalOpen(true)}
+                            className="w-full md:w-auto bg-[#C7A24B] text-[#140309] px-8 py-4 uppercase text-xs tracking-[0.2em] font-bold hover:bg-[#D4B56A] transition-colors"
+                        >
+                            Upload Photo
+                        </button>
+                    </div>
                 </div>
 
                 {loading ? (
@@ -156,27 +155,10 @@ function UploadModal({ isOpen, onClose, onUploadSuccess }: { isOpen: boolean; on
                             />
 
                             <div className="pt-4">
-                                <UploadDropzone
-                                    endpoint="imageUploader"
-                                    onClientUploadComplete={async (res) => {
-                                        // Do something with the response
-                                        console.log("Files: ", res);
-                                        if (res && res[0]) {
-                                            const file = res[0];
-                                            await saveMediaMetadata(file.url, file.type || 'image/jpeg', caption, uploaderName);
-                                            onUploadSuccess();
-                                        }
-                                    }}
-                                    onUploadError={(error: Error) => {
-                                        // Do something with the error.
-                                        alert(`ERROR! ${error.message}`);
-                                    }}
-                                    appearance={{
-                                        button: "bg-[#C7A24B] text-[#140309] font-sans font-bold uppercase tracking-widest text-xs hover:bg-[#D4B56A]",
-                                        container: "border-2 border-dashed border-[#F6F3EE]/20 rounded-lg p-0 hover:border-[#C7A24B] transition-colors",
-                                        label: "text-[#C7A24B] hover:text-[#D4B56A]",
-                                        allowedContent: "text-[#F6F3EE]/40"
-                                    }}
+                                <FirebaseUpload
+                                    uploaderName={uploaderName}
+                                    caption={caption}
+                                    onUploadSuccess={onUploadSuccess}
                                 />
                             </div>
                         </div>
@@ -188,5 +170,90 @@ function UploadModal({ isOpen, onClose, onUploadSuccess }: { isOpen: boolean; on
                 </div>
             )}
         </AnimatePresence>
+    );
+}
+
+function FirebaseUpload({ uploaderName, caption, onUploadSuccess }: { uploaderName: string; caption: string; onUploadSuccess: () => void }) {
+    const [isUploading, setIsUploading] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const [dragActive, setDragActive] = useState(false);
+    const { uploadMedia, saveMediaMetadata } = require('@/lib/firebase-services');
+
+    const handleUpload = async (file: File) => {
+        if (!uploaderName) {
+            alert("Please enter your name first.");
+            return;
+        }
+
+        setIsUploading(true);
+        try {
+            const url = await uploadMedia(file, (p: number) => setProgress(p));
+            await saveMediaMetadata(url, file.type, caption, uploaderName);
+            onUploadSuccess();
+        } catch (error) {
+            console.error(error);
+            alert("Upload failed. Please check your connection.");
+        } finally {
+            setIsUploading(false);
+            setProgress(0);
+        }
+    };
+
+    const handleDrag = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.type === "dragenter" || e.type === "dragover") {
+            setDragActive(true);
+        } else if (e.type === "dragleave") {
+            setDragActive(false);
+        }
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragActive(false);
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            handleUpload(e.dataTransfer.files[0]);
+        }
+    };
+
+    return (
+        <div
+            className={`
+                relative border-2 border-dashed rounded-lg p-10 transition-colors flex flex-col items-center justify-center gap-4
+                ${dragActive ? 'border-[#C7A24B] bg-[#C7A24B]/5' : 'border-[#F6F3EE]/20 hover:border-[#C7A24B]'}
+            `}
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+        >
+            <input
+                type="file"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0])}
+                disabled={isUploading}
+            />
+
+            {isUploading ? (
+                <div className="flex flex-col items-center gap-3">
+                    <div className="w-10 h-10 border-2 border-[#C7A24B] border-t-transparent rounded-full animate-spin"></div>
+                    <p className="text-xs font-bold text-[#C7A24B] tracking-[0.2em]">{Math.round(progress)}%</p>
+                </div>
+            ) : (
+                <>
+                    <div className="w-12 h-12 bg-[#C7A24B]/10 rounded-full flex items-center justify-center text-[#C7A24B]">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.587-1.587a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div className="text-center">
+                        <p className="text-[#C7A24B] font-bold text-xs tracking-widest uppercase mb-1">Choose File</p>
+                        <p className="text-[#F6F3EE]/40 text-[10px] uppercase tracking-wider">or drag and drop</p>
+                    </div>
+                </>
+            )}
+        </div>
     );
 }

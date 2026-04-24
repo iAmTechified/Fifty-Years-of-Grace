@@ -8,7 +8,7 @@ import Footer from '@/components/Footer'; // Assuming this exists
 
 export default function GiftingVariationsPage() {
     return (
-        <main className="min-h-screen bg-[#140309] text-[#F6F3EE]">
+        <main className="min-h-screen bg-[#140309] text-[#F6F3EE] overflow-x-hidden">
             <FloatingNav />
 
             <div className="pt-32 pb-12 text-center">

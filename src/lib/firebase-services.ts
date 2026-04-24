@@ -14,6 +14,7 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { RSVP, BirthdayNote, GiftTransaction, MediaItem } from "./types";
+import { normalizeAttendanceDays } from "./rsvp-days";
 
 // Collection References
 const RSVPS_COLLECTION = "rsvps";
@@ -25,8 +26,14 @@ const MEDIA_COLLECTION = "media_gallery";
 
 export const submitRSVP = async (rsvpData: Omit<RSVP, "id" | "createdAt">) => {
     try {
+        const attendanceDays = normalizeAttendanceDays(rsvpData.attendanceDays);
+        if (attendanceDays.length === 0) {
+            throw new Error("Please select at least one day to attend.");
+        }
+
         const docRef = await addDoc(collection(db, RSVPS_COLLECTION), {
             ...rsvpData,
+            attendanceDays,
             createdAt: Timestamp.now().toMillis(),
         });
         return { success: true, id: docRef.id };
@@ -40,10 +47,14 @@ export const getRSVPs = async () => {
     try {
         const q = query(collection(db, RSVPS_COLLECTION), orderBy("createdAt", "desc"));
         const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => ({
-            id: doc.id,
-            ...doc.data()
-        })) as RSVP[];
+        return querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => {
+            const data = doc.data();
+            return {
+                id: doc.id,
+                ...data,
+                attendanceDays: normalizeAttendanceDays(data.attendanceDays),
+            };
+        }) as RSVP[];
     } catch (error) {
         console.error("Error fetching RSVPs:", error);
         return [];
@@ -112,10 +123,10 @@ export const saveMediaMetadata = async (fileUrl: string, fileType: string, capti
         const mediaData: Omit<MediaItem, "id" | "createdAt"> = {
             url: fileUrl,
             type: fileType.startsWith('image') ? 'image' : 'video',
-            mimeType: fileType, // We might need to derive this or pass it from the upload response if available, or just generic
+            mimeType: fileType,
             caption: caption || "",
             uploadedBy: uploadedBy || "Anonymous",
-            path: fileUrl // Using URL as path since we don't manage storage path directly here anymore
+            path: fileUrl
         };
 
         const docRef = await addDoc(collection(db, MEDIA_COLLECTION), {
@@ -128,6 +139,42 @@ export const saveMediaMetadata = async (fileUrl: string, fileType: string, capti
         console.error("Error saving media metadata:", error);
         throw error;
     }
+};
+
+export const uploadMedia = (
+    file: File,
+    onProgress?: (progress: number) => void
+): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        const formData = new FormData();
+        formData.append("file", file);
+
+        xhr.upload.addEventListener("progress", (event) => {
+            if (event.lengthComputable && onProgress) {
+                const progress = (event.loaded / event.total) * 100;
+                onProgress(progress);
+            }
+        });
+
+        xhr.addEventListener("load", () => {
+            try {
+                const response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    resolve(response.url);
+                } else {
+                    reject(new Error(response.message || "Upload failed"));
+                }
+            } catch (error) {
+                reject(new Error("Invalid response from server"));
+            }
+        });
+
+        xhr.addEventListener("error", () => reject(new Error("Network error")));
+        
+        xhr.open("POST", "/api/upload.php");
+        xhr.send(formData);
+    });
 };
 
 export const getGalleryMedia = async () => {

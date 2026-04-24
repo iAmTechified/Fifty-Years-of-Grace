@@ -78,7 +78,7 @@ const StoryBlock = ({ item, index, setIndex }: { item: typeof storyData[0], inde
             className="h-full flex flex-col items-center justify-between md:justify-center max-w-lg mx-auto p-8 pt-15"
         >
             <div className='md:hidden h-full w-full'></div>
-            <p className="h-[60%] md:h-auto text-xl md:text-4xl leading-relaxed font-sans font-light text-[#F6F3EE]/90">
+            <p className="h-[60%] md:h-auto text-lg xs:text-xl sm:text-2xl ms:text-3xl md:text-4xl leading-relaxed font-sans font-light text-[#F6F3EE]/90 h-short:text-base h-short:leading-snug">
                 {item.text.split(" ").map((word, i) => {
                     const isHighlight = word.toLowerCase().includes(item.highlight.toLowerCase());
                     return (
@@ -142,6 +142,66 @@ export default function Story() {
         };
     }, [scrollYProgress]);
 
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    if (isMobile) {
+        return (
+            <div className="relative bg-[#140309] text-[#F6F3EE] py-16 px-6 space-y-24 overflow-hidden">
+                {/* Background Texture for Depth */}
+                <div className="absolute inset-0 z-0 opacity-[0.05] pointer-events-none mix-blend-overlay"
+                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
+                />
+
+                <div className="relative z-10 text-center opacity-30 uppercase tracking-[0.3em] text-[10px] font-serif mb-12">
+                    Her Story
+                </div>
+
+                {storyData.map((item, index) => (
+                    <motion.div
+                        key={item.id}
+                        initial={{ opacity: 0, y: 40 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ margin: "-15% 0px", once: true }}
+                        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                        className="relative z-10 space-y-10"
+                    >
+                        <div className="aspect-[4/5] w-full max-w-sm mx-auto rounded-lg overflow-hidden shadow-2xl relative">
+                            <img
+                                src={item.image}
+                                alt={item.title}
+                                className="w-full h-full object-cover object-top"
+                                loading="lazy"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#140309] via-transparent to-transparent opacity-60" />
+                        </div>
+                        <div className="px-4 max-w-md mx-auto pb-12">
+                            <p className="text-xl xs:text-2xl font-sans font-light leading-relaxed text-[#F6F3EE]/90 text-center">
+                                {item.text.split(" ").map((word, i) => {
+                                    const isHighlight = word.toLowerCase().includes(item.highlight.toLowerCase());
+                                    return (
+                                        <span key={i} className={isHighlight ? "italic text-[#C7A24B]" : ""}>
+                                            {word}{" "}
+                                        </span>
+                                    );
+                                })}
+                            </p>
+                        </div>
+                    </motion.div>
+                ))}
+                <div className="h-20" />
+            </div>
+        );
+    }
+
     return (
         <section
             ref={containerRef}
@@ -155,7 +215,7 @@ export default function Story() {
             </div>
             <div className="relative w-full flex flex-col md:flex-row items-start">
                 {/* LEFT: Sticky Image Container */}
-                <div className="flex w-full md:w-1/2 h-[45vh] md:h-screen sticky top-[15vh] md:top-0 self-start items-center justify-center p-3 md:p-12 z-20">
+                <div className="flex w-full md:w-1/2 h-[40vh] xs:h-[45vh] md:h-screen sticky top-[10vh] xs:top-[12vh] sm:top-[15vh] md:top-0 self-start items-center justify-center p-3 md:p-12 z-20 h-short:h-[35vh] h-short:top-[8vh]">
 
                     {/* Perspective Context */}
                     <div className="relative w-full h-full flex items-center justify-center perspective-[1000px]">
@@ -165,7 +225,7 @@ export default function Story() {
                                 rotateY: springRotateY,
                                 transformStyle: "preserve-3d"
                             }}
-                            className="relative w-auto h-full md:h-auto md:w-full aspect-[4/5] max-w-md max-h-full"
+                            className="relative w-full aspect-[4/5] max-w-md max-h-[80vh]"
                         >
                             {/* Image Transitions */}
                             <div className="relative w-full h-full rounded-lg overflow-hidden shadow-2xl bg-[#1a1a1a]">
@@ -190,8 +250,8 @@ export default function Story() {
                                         <img
                                             src={story.image}
                                             alt={story.title}
-                                            className="absolute inset-0 w-full h-full object-cover object-top"
-                                            loading="lazy" // Ensure images load immediately
+                                            className="absolute inset-0 w-full h-full object-cover object-[center_15%]"
+                                            loading="lazy"
                                         />
                                     </motion.div>
                                 ))}

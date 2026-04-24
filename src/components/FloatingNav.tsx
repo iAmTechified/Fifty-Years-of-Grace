@@ -69,7 +69,7 @@ export default function FloatingNav() {
     const navContainerRef = useRef<HTMLDivElement>(null);
 
     return (
-        <div className="fixed top-8 right-0 mr-5 md:left-1/2 md:-translate-x-1/2 z-50 w-[auto] md:w-auto md:max-w-fit">
+        <div className="fixed top-6 right-1 mr-2 z-50 w-auto">
             <motion.div
                 layout
                 ref={navContainerRef}
@@ -81,9 +81,7 @@ export default function FloatingNav() {
                     "px-2 py-2 shadow-2xl transition-colors duration-300",
                     isExpanded ? "flex-col" : "flex-row items-center",
                     "md:flex-row", // Always row on desktop
-                    activeTab === "gifting"
-                        ? "border border-black/10 bg-[#F6F3EE]/25"
-                        : "border border-white/10 bg-white/2"
+                    "border-white/10 bg-white/2"
                 )}
             >
                 {/* Edge Glow Effect */}
@@ -93,9 +91,9 @@ export default function FloatingNav() {
                         opacity: opacitySpring,
                         background: useTransform(
                             [springX, springY],
-                            ([x, y]) => `radial-gradient(150px circle at ${x}px ${y}px, ${activeTab === "gifting" ? "rgba(0,0,0,0.1)" : "rgba(199, 162, 75, 0.1)"}, transparent 60%)`
+                            ([x, y]) => `radial-gradient(150px circle at ${x}px ${y}px, rgba(199, 162, 75, 0.1), transparent 60%)`
                         ),
-                        mixBlendMode: activeTab === "gifting" ? "multiply" : "screen"
+                        mixBlendMode: "screen"
                     }}
                 />
 
@@ -127,8 +125,8 @@ export default function FloatingNav() {
                                     !isVisible && "hidden md:block", // Hide inactive items on mobile unless expanded
                                     isExpanded && "w-full text-left rounded-xl", // Full width when vertically expanded
                                     isActive
-                                        ? (isGifting ? "text-black" : "text-foreground")
-                                        : (isGifting ? "text-black/60 hover:text-black" : "text-foreground/80 hover:text-foreground")
+                                        ? "text-foreground"
+                                        : "text-foreground/80 hover:text-foreground"
                                 )}
                             >
                                 {isActive && (
@@ -136,9 +134,7 @@ export default function FloatingNav() {
                                         layoutId="active-pill"
                                         className={cn(
                                             "absolute inset-0 rounded-full backdrop-blur-md border",
-                                            isGifting
-                                                ? "border-black/5 bg-black/5"
-                                                : "border-white/10 bg-white/5"
+                                            "border-white/10 bg-white/5"
                                         )}
                                         transition={{
                                             type: "spring",
@@ -161,7 +157,9 @@ export default function FloatingNav() {
                     onClick={() => setIsExpanded(!isExpanded)}
                     className={cn(
                         "md:hidden relative z-20 p-2 ml-auto text-foreground/80 hover:text-foreground transition-colors",
-                        activeTab === "gifting" ? "text-black/60 hover:text-black" : "text-white/60 hover:text-white"
+                    activeTab === "gifting" || activeTab === "moments" || activeTab === "celebration" || activeTab === "dedication" || activeTab === "story" || activeTab === "hero"
+                        ? "text-white/60 hover:text-white"
+                        : "text-white/60 hover:text-white"
                     )}
                     aria-label="Toggle Menu"
                 >

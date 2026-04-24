@@ -22,30 +22,30 @@ export default function Home() {
       <ScrollProgress />
       <RsvpModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
-      <section id="hero">
+      <section id="hero" className="w-full">
         <Hero isModalOpen={isModalOpen} onOpenModal={() => setIsModalOpen(true)} />
       </section>
 
-      <div className="h-screen w-full" />
+      <div className="h-screen w-full flex-shrink-0" />
 
       {/* <div className="relative z-10 bg-[#140309]"> */}
-      <section id="dedication">
+      <section id="dedication" className="w-full">
         <Dedication />
       </section>
-      <section id="story">
+      <section id="story" className="w-full">
         <Story />
       </section>
       {/* </div> */}
 
-      <section id="celebration">
+      <section id="celebration" className="w-full">
         <Celebration onOpenModal={() => setIsModalOpen(true)} />
       </section>
 
-      <section id="moments">
+      <section id="moments" className="w-full overflow-x-hidden">
         <Moments />
       </section>
 
-      <section id="gifting">
+      <section id="gifting" className="w-full overflow-x-hidden">
         <PresenceIsPresent />
       </section>
 

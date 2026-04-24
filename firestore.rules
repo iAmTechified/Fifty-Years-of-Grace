@@ -1,14 +1,72 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isValidApprovalStatus(status) {
+      return status in ['pending', 'approved', 'declined'];
+    }
+
+    function isValidAttendanceDays(days) {
+      return days is list
+        && days.size() >= 1
+        && days.size() <= 3
+        && days.hasOnly(['2026-06-26', '2026-06-27', '2026-06-28']);
+    }
+
+    function isValidRsvpCreate() {
+      return request.resource.data.keys().hasOnly([
+          'fullName',
+          'email',
+          'phone',
+          'attending',
+          'attendanceDays',
+          'guestsCount',
+          'dietaryRestrictions',
+          'specialRequests',
+          'createdAt',
+          'approval_status'
+        ])
+        && request.resource.data.keys().hasAll([
+          'fullName',
+          'email',
+          'attending',
+          'attendanceDays',
+          'guestsCount',
+          'createdAt',
+          'approval_status'
+        ])
+        && request.resource.data.fullName is string
+        && request.resource.data.fullName.size() > 1
+        && request.resource.data.email is string
+        && request.resource.data.email.size() > 3
+        && request.resource.data.attending is bool
+        && request.resource.data.guestsCount is int
+        && request.resource.data.guestsCount >= 1
+        && request.resource.data.createdAt is int
+        && isValidApprovalStatus(request.resource.data.approval_status)
+        && isValidAttendanceDays(request.resource.data.attendanceDays)
+        && (
+          !('phone' in request.resource.data)
+          || request.resource.data.phone is string
+        )
+        && (
+          !('dietaryRestrictions' in request.resource.data)
+          || request.resource.data.dietaryRestrictions is string
+        )
+        && (
+          !('specialRequests' in request.resource.data)
+          || request.resource.data.specialRequests is string
+        );
+    }
     
     // RSVPs: Anyone can submit
     // ALLOW ADMIN READ/UPDATE:
     // In a real app, use: allow read, update: if request.auth != null;
     // For now, enabling read/write for all to allow the admin panel to work without Auth implementation
     match /rsvps/{rsvp} {
-      allow create: if true; 
-      allow read, update: if true; 
+      allow create: if isValidRsvpCreate();
+      allow read: if true;
+      allow update: if request.resource.data.diff(resource.data).changedKeys().hasOnly(['approval_status'])
+        && isValidApprovalStatus(request.resource.data.approval_status);
     }
 
     // Birthday Notes: Everyone can read and write

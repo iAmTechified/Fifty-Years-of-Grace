@@ -1,9 +1,12 @@
+import type { RSVPDayDate } from "./rsvp-days";
+
 export interface RSVP {
     id?: string;
     fullName: string;
     email: string;
     phone?: string;
     attending: boolean;
+    attendanceDays: RSVPDayDate[];
     guestsCount: number;
     dietaryRestrictions?: string;
     specialRequests?: string;

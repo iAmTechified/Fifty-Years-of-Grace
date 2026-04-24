@@ -19,7 +19,8 @@ import {
 import { clsx } from "clsx";
 import { getRSVPs, updateRSVPStatus, getGalleryMedia, saveMediaMetadata, getBirthdayNotes, deleteMediaItem } from "@/lib/firebase-services";
 import { RSVP, MediaItem, BirthdayNote } from "@/lib/types";
-import { useUploadThing } from "@/lib/uploadthing";
+import { sendGuestConfirmation } from "@/lib/email-service";
+import { formatAttendanceDayLabel, normalizeAttendanceDays } from "@/lib/rsvp-days";
 
 
 import { createContext, useContext } from "react";
@@ -183,6 +184,27 @@ const Badge = ({ status }: { status: string }) => {
     );
 };
 
+const AttendanceDays = ({ days }: { days?: RSVP["attendanceDays"] }) => {
+    const labels = normalizeAttendanceDays(days).map(formatAttendanceDayLabel);
+
+    if (labels.length === 0) {
+        return <span className="text-gray-300">-</span>;
+    }
+
+    return (
+        <div className="flex flex-wrap gap-1.5">
+            {labels.map((label) => (
+                <span
+                    key={label}
+                    className="inline-flex items-center rounded-full border border-[#C7A24B]/40 bg-[#C7A24B]/10 px-2.5 py-1 text-[11px] font-medium text-[#7a5f1f]"
+                >
+                    {label}
+                </span>
+            ))}
+        </div>
+    );
+};
+
 // --- Views ---
 
 const RSVPsView = () => {
@@ -206,6 +228,20 @@ const RSVPsView = () => {
         if (!id) return;
         try {
             await updateRSVPStatus(id, newStatus);
+            
+            // If approved, send the Guest Confirmation Email (Stage 2) - Non-blocking
+            if (newStatus === "approved") {
+                const rsvp = rsvps.find(r => r.id === id);
+                if (rsvp) {
+                    sendGuestConfirmation(
+                        rsvp.email,
+                        rsvp.fullName,
+                        rsvp.guestsCount,
+                        normalizeAttendanceDays(rsvp.attendanceDays)
+                    );
+                }
+            }
+
             // Optimistic update
             setRsvps(prev => prev.map(r => r.id === id ? { ...r, approval_status: newStatus } : r));
             showToast(`Guest has been ${newStatus}`, "success");
@@ -234,11 +270,12 @@ const RSVPsView = () => {
             return;
         }
 
-        const headers = ["Name", "Email", "Guests", "Dietary Restrictions", "Date"];
+        const headers = ["Name", "Email", "Guests", "Attendance Days", "Dietary Restrictions", "Date"];
         const rows = approved.map(r => [
             `"${r.fullName}"`,
             `"${r.email}"`,
             r.guestsCount,
+            `"${normalizeAttendanceDays(r.attendanceDays).map(formatAttendanceDayLabel).join(" | ")}"`,
             `"${r.dietaryRestrictions || ""}"`,
             new Date(r.createdAt).toLocaleDateString()
         ]);
@@ -291,8 +328,8 @@ const RSVPsView = () => {
                 <StatCard label="Declined" value={stats.declined} colorClass="text-red-600" />
             </div>
 
-            <div className="bg-white border border-gray-100 rounded-3xl container mb-12 overflow-hidden shadow-sm">
-                <div className="p-4 border-b border-gray-100 flex gap-2 overflow-x-auto">
+            <div className="bg-white border border-gray-100 rounded-2xl md:rounded-3xl container mb-12 overflow-hidden shadow-sm">
+                <div className="p-4 border-b border-gray-100 flex gap-2 overflow-x-auto no-scrollbar">
                     {(["all", "pending", "approved", "declined"] as const).map((filter) => (
                         <button
                             key={filter}
@@ -312,7 +349,7 @@ const RSVPsView = () => {
                 {/* Responsive List View */}
 
                 {/* Mobile/Tablet/Small Laptop Card View */}
-                <div className="xl:hidden">
+                <div className="xl:hidden max-h-[60vh] overflow-y-auto">
                     {loading ? (
                         <div className="p-8 text-center text-gray-400">
                             <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2" />
@@ -326,25 +363,30 @@ const RSVPsView = () => {
                         <div className="divide-y divide-gray-100">
                             {filtered.map((rsvp) => (
                                 <div key={rsvp.id} className="p-4 flex flex-col gap-3">
-                                    <div className="flex justify-between items-start">
-                                        <div>
-                                            <p className="font-medium text-gray-900">{rsvp.fullName}</p>
-                                            <p className="text-gray-500 text-xs">{rsvp.email}</p>
+                                    <div className="flex justify-between items-start gap-2">
+                                        <div className="min-w-0">
+                                            <p className="font-medium text-gray-900 truncate">{rsvp.fullName}</p>
+                                            <p className="text-gray-500 text-xs truncate">{rsvp.email}</p>
                                         </div>
                                         <Badge status={rsvp.approval_status || "pending"} />
                                     </div>
 
-                                    <div className="flex gap-4 text-sm text-gray-600">
+                                    <div className="flex flex-wrap gap-4 text-sm text-gray-600">
                                         <div className="flex items-center gap-2">
                                             <Users className="w-4 h-4 text-gray-400" />
                                             <span>{rsvp.guestsCount} Guest{rsvp.guestsCount !== 1 ? 's' : ''}</span>
                                         </div>
                                         {rsvp.dietaryRestrictions && (
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex items-center gap-2 min-w-0">
                                                 <span className="w-1 h-1 rounded-full bg-gray-300" />
-                                                <span className="truncate max-w-[150px]">{rsvp.dietaryRestrictions}</span>
+                                                <span className="truncate">{rsvp.dietaryRestrictions}</span>
                                             </div>
                                         )}
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <p className="text-[11px] uppercase tracking-wide text-gray-400">Attendance Days</p>
+                                        <AttendanceDays days={rsvp.attendanceDays} />
                                     </div>
 
                                     {(rsvp.approval_status || "pending") === "pending" && (
@@ -378,6 +420,7 @@ const RSVPsView = () => {
                             <tr>
                                 <th className="px-6 py-4">Name</th>
                                 <th className="px-6 py-4">Guests</th>
+                                <th className="px-6 py-4">Attendance Days</th>
                                 <th className="px-6 py-4">Dietary</th>
                                 <th className="px-6 py-4">Status</th>
                                 <th className="px-6 py-4 text-right">Actions</th>
@@ -386,14 +429,14 @@ const RSVPsView = () => {
                         <tbody className="divide-y divide-gray-50">
                             {loading ? (
                                 <tr>
-                                    <td colSpan={5} className="px-6 py-12 text-center text-gray-400">
+                                    <td colSpan={6} className="px-6 py-12 text-center text-gray-400">
                                         <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2" />
                                         Loading guests...
                                     </td>
                                 </tr>
                             ) : filtered.length === 0 ? (
                                 <tr>
-                                    <td colSpan={5} className="px-6 py-12 text-center text-gray-400">
+                                    <td colSpan={6} className="px-6 py-12 text-center text-gray-400">
                                         No requests found in this category.
                                     </td>
                                 </tr>
@@ -405,6 +448,9 @@ const RSVPsView = () => {
                                             <p className="text-gray-500 text-xs">{rsvp.email}</p>
                                         </td>
                                         <td className="px-6 py-4 text-gray-600">{rsvp.guestsCount}</td>
+                                        <td className="px-6 py-4 text-gray-600 min-w-[320px]">
+                                            <AttendanceDays days={rsvp.attendanceDays} />
+                                        </td>
                                         <td className="px-6 py-4 text-gray-600">
                                             {rsvp.dietaryRestrictions || <span className="text-gray-300">-</span>}
                                         </td>
@@ -450,30 +496,36 @@ const GalleryUploadCard = ({ onUploadComplete }: { onUploadComplete: () => void 
     const { showToast } = useToast();
     const [file, setFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
+    const [isUploading, setIsUploading] = useState(false);
+    const [progress, setProgress] = useState(0);
     const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const { startUpload, isUploading } = useUploadThing("imageUploader", {
-        onClientUploadComplete: async (res) => {
-            if (res && res[0]) {
-                const uploadedFile = res[0];
-                await saveMediaMetadata(uploadedFile.url, uploadedFile.type || 'image/jpeg', "Admin Upload", "Admin");
-                onUploadComplete();
-                setFile(null);
-                setPreview(null);
-                setPreview(null);
-                showToast("Upload Completed Successfully", "success");
-            }
-        },
-        onUploadError: (error: Error) => {
-            showToast(`Upload failed: ${error.message}`, "error");
-        },
-    });
+    const { uploadMedia, saveMediaMetadata } = require('@/lib/firebase-services');
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const selectedFile = e.target.files[0];
             setFile(selectedFile);
             setPreview(URL.createObjectURL(selectedFile));
+        }
+    };
+
+    const handleUpload = async () => {
+        if (!file) return;
+
+        setIsUploading(true);
+        try {
+            const url = await uploadMedia(file, (p: number) => setProgress(p));
+            await saveMediaMetadata(url, file.type || 'image/jpeg', "Admin Upload", "Admin");
+            onUploadComplete();
+            setFile(null);
+            setPreview(null);
+            showToast("Upload Completed Successfully", "success");
+        } catch (error) {
+            console.error(error);
+            showToast("Upload failed", "error");
+        } finally {
+            setIsUploading(false);
+            setProgress(0);
         }
     };
 
@@ -512,13 +564,14 @@ const GalleryUploadCard = ({ onUploadComplete }: { onUploadComplete: () => void 
                         <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-3">
                             {isUploading ? (
                                 <div className="flex flex-col items-center text-white">
+                                    {/* Simple progress ring or text */}
                                     <Loader2 className="w-8 h-8 animate-spin mb-2" />
-                                    <span className="text-xs font-medium tracking-wide">UPLOADING...</span>
+                                    <span className="text-[10px] font-bold tracking-widest">{Math.round(progress)}%</span>
                                 </div>
                             ) : (
                                 <>
                                     <button
-                                        onClick={() => startUpload([file])}
+                                        onClick={handleUpload}
                                         className="bg-[#C7A24B] text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-[#b08d3e] transition-colors shadow-lg"
                                     >
                                         Confirm
@@ -840,6 +893,11 @@ const AdminLogin = ({ onLogin }: { onLogin: () => void }) => {
         </div>
     );
 };
+
+// - [x] Resolve horizontal overflow on mobile (Celebration/Story)
+// - [x] Implement scrollable/collapsible Guest List in Admin mobile view
+// - [x] Fix Story section image height/perspective on desktop breakpoints
+// - [x] Final multi-viewport verification audit
 
 export default function AdminPage() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);

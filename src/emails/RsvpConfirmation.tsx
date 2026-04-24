@@ -7,22 +7,25 @@ import {
     Preview,
     Section,
     Text,
-    Link,
     Hr,
     Tailwind
 } from '@react-email/components';
 import * as React from 'react';
+import { formatAttendanceDayLabel, normalizeAttendanceDays } from '@/lib/rsvp-days';
 
 interface RsvpConfirmationEmailProps {
     fullName: string;
     guestsCount: number;
+    attendanceDays?: string[];
 }
 
 export const RsvpConfirmationEmail = ({
     fullName = 'Guest',
     guestsCount = 0,
+    attendanceDays = [],
 }: RsvpConfirmationEmailProps) => {
     const previewText = `We've received your RSVP`;
+    const selectedDayLabels = normalizeAttendanceDays(attendanceDays).map(formatAttendanceDayLabel);
 
     return (
         <Html>
@@ -41,7 +44,8 @@ export const RsvpConfirmationEmail = ({
                     <Section style={details}>
                         <Text style={paragraph}>
                             <strong>Status:</strong> Pending Confirmation<br />
-                            <strong>Guests:</strong> {guestsCount > 0 ? guestsCount + 1 : 1}
+                            <strong>Guests:</strong> {guestsCount > 0 ? guestsCount + 1 : 1}<br />
+                            <strong>Selected Days:</strong> {selectedDayLabels.length > 0 ? selectedDayLabels.join(' | ') : 'Not specified'}
                         </Text>
                     </Section>
                     <Text style={text}>

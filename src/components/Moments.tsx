@@ -42,7 +42,6 @@ export default function Moments() {
     const [galleryImages, setGalleryImages] = useState<GalleryImage[]>(FALLBACK_IMAGES);
 
     // UI State
-    const [showPrompt, setShowPrompt] = useState(false);
     const [showWishModal, setShowWishModal] = useState(false);
     const [activeGalleryIndex, setActiveGalleryIndex] = useState<number | null>(null);
     const [showNoteDetailModal, setShowNoteDetailModal] = useState<Wish | null>(null);
@@ -119,31 +118,6 @@ export default function Moments() {
         setCurrentWishIndex(prev => (prev - 1 + wishes.length) % wishes.length);
     };
 
-    // --- WISH TRIGGER LOGIC ---
-    useEffect(() => {
-        if (isInView && !hasPrompted) {
-            const timer = setTimeout(() => {
-                // Check session storage if needed, for this demo we just use local component state
-                // assuming "session" means this page load for now.
-                const alreadyPrompted = sessionStorage.getItem('wishPromptShown');
-                if (!alreadyPrompted) {
-                    setShowPrompt(true);
-                    setHasPrompted(true);
-                    sessionStorage.setItem('wishPromptShown', 'true');
-                }
-            }, 2000); // 2s dwell time
-            return () => clearTimeout(timer);
-        }
-    }, [isInView, hasPrompted]);
-
-    const handleOpenWishForm = () => {
-        setShowPrompt(false);
-        setShowWishModal(true);
-    };
-
-    const handleDismissPrompt = () => {
-        setShowPrompt(false);
-    };
 
     const handleAddWish = async (name: string, message: string) => {
         try {
@@ -299,7 +273,7 @@ export default function Moments() {
                             </div>
 
                             <motion.button
-                                onClick={handleOpenWishForm}
+                                onClick={() => setShowWishModal(true)}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 className="flex items-center gap-3 text-[#F6F3EE]/60 hover:text-[#C7A24B] transition-colors group text-sm font-light"
@@ -314,36 +288,6 @@ export default function Moments() {
                 </div>
             </div>
 
-            {/* --- PROMPT MODAL (Slide-up card) --- */}
-            <AnimatePresence>
-                {showPrompt && (
-                    <motion.div
-                        initial={{ y: 100, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: 100, opacity: 0 }}
-                        transition={{ type: "spring", damping: 20, stiffness: 100 }}
-                        className="fixed bottom-8 right-8 z-50 max-w-sm w-full bg-[#1A1A1C] border border-[#F6F3EE]/10 p-6 shadow-2xl rounded-sm"
-                    >
-                        <p className="font-serif text-xl text-[#F6F3EE] mb-4">
-                            Would you like to send Obele a birthday wish?
-                        </p>
-                        <div className="flex gap-4">
-                            <button
-                                onClick={handleOpenWishForm}
-                                className="flex-1 bg-[#C7A24B] text-[#140309] py-2 px-4 text-sm font-semibold hover:bg-[#D4B56A] transition-colors"
-                            >
-                                Yes, I’d love to
-                            </button>
-                            <button
-                                onClick={handleDismissPrompt}
-                                className="flex-1 bg-transparent border border-[#F6F3EE]/20 text-[#F6F3EE]/60 py-2 px-4 text-sm hover:text-[#F6F3EE] hover:border-[#F6F3EE] transition-all"
-                            >
-                                Maybe later
-                            </button>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
 
             {/* --- SUBMISSION FORM MODAL --- */}
             <AnimatePresence>
