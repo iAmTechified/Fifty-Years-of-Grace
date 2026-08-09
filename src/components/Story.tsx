@@ -47,15 +47,6 @@ const StoryBlock = ({ item, index, setIndex }: { item: typeof storyData[0], inde
         offset: ["start end", "end start"]
     });
 
-    // Create a value that peaks when the element is in the center of the viewport
-    // roughly 0.5 scrollYProgress typically means center if container matches viewport, 
-    // but in a long scroll flow, we often use specific offsets. 
-    // Let's use simpler Intersection logic via onViewportEnter/onUpdate if we want strict index tracking,
-    // OR use raw scroll progress to drive opacity/blur.
-
-    // We want the text to be visible when snapped (centered) but fade out quickly as it scrolls past
-    // to avoid overlapping/clutter with the next item or the sticky header.
-    // Range focused around 0.5 (center).
     const opacity = useTransform(scrollYProgress, [0.2, 0.45, 0.55, 0.8], [0, 1, 1, 0]);
     const scale = useTransform(scrollYProgress, [0.2, 0.45, 0.55, 0.8], [0.85, 1, 1, 0.85]);
     const blur = useTransform(scrollYProgress, [0.2, 0.45, 0.55, 0.8], [8, 0, 0, 8]);
@@ -75,10 +66,9 @@ const StoryBlock = ({ item, index, setIndex }: { item: typeof storyData[0], inde
         <motion.div
             ref={ref}
             style={{ opacity, scale, filter: useMotionTemplate`blur(${blur}px)` }}
-            className="h-full flex flex-col items-center justify-between md:justify-center max-w-lg mx-auto p-8 pt-15"
+            className="w-full h-full flex flex-col items-center justify-center max-w-lg mx-auto p-8"
         >
-            <div className='md:hidden h-full w-full'></div>
-            <p className="h-[60%] md:h-auto text-lg xs:text-xl sm:text-2xl ms:text-3xl md:text-4xl leading-relaxed font-sans font-light text-[#F6F3EE]/90 h-short:text-base h-short:leading-snug">
+            <p className="text-xl sm:text-2xl ms:text-3xl md:text-4xl leading-relaxed font-sans font-light text-[#F6F3EE]/90">
                 {item.text.split(" ").map((word, i) => {
                     const isHighlight = word.toLowerCase().includes(item.highlight.toLowerCase());
                     return (
@@ -118,29 +108,28 @@ export default function Story() {
     const springRotateY = useSpring(rotateY, springConfig);
 
     // Dynamic Snap Logic
-    const { scrollYProgress } = useScroll({
+    const { scrollYProgress: sectionScrollProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end end"]
     });
 
     useEffect(() => {
-        const unsubscribe = scrollYProgress.on("change", (latest) => {
-            // Engage mandatory snap ONLY when we are deep inside the section (e.g., 0 to 1)
-            // But to allow exit, we might want to be looser near edges.
-            // Actually, simply toggling it when >= 0 and <= 1 is what provides the "modal" feel.
-            // Exiting happens because when you scroll past 1, this fires and removes the class.
+        const unsubscribe = sectionScrollProgress.on("change", (latest) => {
             const html = document.documentElement;
             if (latest >= 0.05 && latest <= 0.95) {
+                html.classList.add('snap-y');
                 html.classList.add('snap-mandatory');
             } else {
+                html.classList.remove('snap-y');
                 html.classList.remove('snap-mandatory');
             }
         });
         return () => {
+            document.documentElement.classList.remove('snap-y');
             document.documentElement.classList.remove('snap-mandatory');
             unsubscribe();
         };
-    }, [scrollYProgress]);
+    }, [sectionScrollProgress]);
 
     const [isMobile, setIsMobile] = useState(false);
 
@@ -215,7 +204,7 @@ export default function Story() {
             </div>
             <div className="relative w-full flex flex-col md:flex-row items-start">
                 {/* LEFT: Sticky Image Container */}
-                <div className="flex w-full md:w-1/2 h-[40vh] xs:h-[45vh] md:h-screen sticky top-[10vh] xs:top-[12vh] sm:top-[15vh] md:top-0 self-start items-center justify-center p-3 md:p-12 z-20 h-short:h-[35vh] h-short:top-[8vh]">
+                <div className="flex w-full md:w-1/2 h-screen sticky top-0 self-start items-center justify-center p-3 md:p-12 z-20">
 
                     {/* Perspective Context */}
                     <div className="relative w-full h-full flex items-center justify-center perspective-[1000px]">
@@ -223,9 +212,10 @@ export default function Story() {
                             style={{
                                 rotateX: springRotateX,
                                 rotateY: springRotateY,
-                                transformStyle: "preserve-3d"
+                                transformStyle: "preserve-3d",
+                                height: 'min(70vh, 500px)',
                             }}
-                            className="relative w-full aspect-[4/5] max-w-md max-h-[80vh]"
+                            className="relative aspect-[4/5]"
                         >
                             {/* Image Transitions */}
                             <div className="relative w-full h-full rounded-lg overflow-hidden shadow-2xl bg-[#1a1a1a]">
@@ -250,7 +240,7 @@ export default function Story() {
                                         <img
                                             src={story.image}
                                             alt={story.title}
-                                            className="absolute inset-0 w-full h-full object-cover object-[center_15%]"
+                                            className="absolute inset-0 w-full h-full object-cover object-[center_top]"
                                             loading="lazy"
                                         />
                                     </motion.div>
@@ -268,7 +258,7 @@ export default function Story() {
                     {storyData.map((item, index) => (
                         <div
                             key={item.id}
-                            className="h-screen w-full flex items-center justify-center snap-end md:snap-center snap-always relative pb-0"
+                            className="h-screen w-full flex items-center justify-center snap-center snap-always relative pb-0"
                         >
                             <StoryBlock
                                 item={item}
@@ -280,8 +270,8 @@ export default function Story() {
                 </div>
             </div>
 
-            {/* Exit Zone - non-snapping area to release scroll */}
-            <div className="h-[20vh] w-full snap-align-none" />
+            {/* Exit Zone */}
+            <div className="h-[20vh] w-full" />
         </section>
     );
 }

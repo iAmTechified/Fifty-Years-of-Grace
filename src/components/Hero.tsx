@@ -37,10 +37,12 @@ const CountdownDigit = ({ digit }: { digit: string }) => {
 
 const Countdown = () => {
     const [timeLeft, setTimeLeft] = useState({ days: '00', hours: '00', minutes: '00', seconds: '00' });
+    const [isFinished, setIsFinished] = useState(false);
 
     useEffect(() => {
-        const target = new Date('2026-06-01T00:00:00');
-        const interval = setInterval(() => {
+        const target = new Date('2026-06-26T00:00:00');
+        
+        const calculateTimeLeft = () => {
             const now = new Date();
             const difference = target.getTime() - now.getTime();
 
@@ -56,11 +58,28 @@ const Countdown = () => {
                     minutes: minutes.toString().padStart(2, '0'),
                     seconds: seconds.toString().padStart(2, '0')
                 });
+            } else {
+                setIsFinished(true);
             }
-        }, 1000);
+        };
+
+        calculateTimeLeft();
+        const interval = setInterval(calculateTimeLeft, 1000);
 
         return () => clearInterval(interval);
     }, []);
+
+    if (isFinished) {
+        return (
+            <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center justify-center text-[#C7A24B] text-xl font-serif italic tracking-widest mb-4 opacity-90"
+            >
+                The Celebration Begins!
+            </motion.div>
+        );
+    }
 
     return (
         <div className="flex gap-4 items-center text-[#F6F3EE]/60 text-xs tracking-widest uppercase mb-4">

@@ -64,8 +64,11 @@ export default function RsvpModal({ isOpen, onClose }: RsvpModalProps) {
                 approval_status: "pending"
             });
 
-            // 2. Send Notification Email to Admin (First Stage) - Non-blocking
-            sendAdminNotification(email, fullName, 1, attendanceDays);
+            // 2. Send Notification Email to Admin
+            const adminEmailResult = await sendAdminNotification(email, fullName, 1, attendanceDays);
+            if (!adminEmailResult.success) {
+                console.warn('[RSVP] RSVP saved but admin notification email failed:', adminEmailResult.error);
+            }
 
             setStatus('success');
             setTimeout(() => {

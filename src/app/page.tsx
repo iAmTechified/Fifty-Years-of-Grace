@@ -12,6 +12,7 @@ import ScrollProgress from '@/components/ScrollProgress';
 import PresenceIsPresent from '@/components/gifting/PresenceIsPresent';
 import Footer from '@/components/Footer';
 import RsvpModal from '@/components/RsvpModal';
+import DublinTour from '@/components/DublinTour';
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,6 +40,10 @@ export default function Home() {
 
       <section id="celebration" className="w-full">
         <Celebration onOpenModal={() => setIsModalOpen(true)} />
+      </section>
+
+      <section id="dublin-tour" className="w-full">
+        <DublinTour />
       </section>
 
       <section id="moments" className="w-full overflow-x-hidden">
